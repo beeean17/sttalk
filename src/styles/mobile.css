@@ -1,0 +1,168 @@
+.mobile-experience {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  --sheet-gutter: 24px;
+}
+.safe-area-probe {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.mobile-overview {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  overscroll-behavior-y: contain;
+}
+.mobile-overview::-webkit-scrollbar {
+  display: none;
+}
+.mobile-brand {
+  padding: max(24px, env(safe-area-inset-top)) var(--sheet-gutter) 0;
+}
+.mobile-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 47px var(--sheet-gutter) 24px;
+}
+.mobile-event-name {
+  font-size: 58px;
+  line-height: 1.35;
+}
+.information-sheet {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 2px 3px var(--shadow-subtle);
+  will-change: transform;
+}
+.sheet-handle {
+  display: flex;
+  width: 100%;
+  height: 44px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+.sheet-handle:active {
+  cursor: grabbing;
+}
+.sheet-handle:focus-visible {
+  outline-offset: -6px;
+  border-radius: inherit;
+}
+.sheet-heading {
+  display: flex;
+  height: 44px;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  padding-inline: var(--sheet-gutter);
+}
+.sheet-preview {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  padding-inline: var(--sheet-gutter);
+}
+.sheet-detail {
+  min-height: 0;
+  flex: 1;
+}
+.sheet-detail[hidden],
+.sheet-scroll[hidden] {
+  display: none;
+}
+.sheet-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px var(--sheet-gutter) max(120px, calc(env(safe-area-inset-bottom) + 104px));
+  scroll-padding-block: 12px 120px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.sheet-scroll:focus-visible {
+  outline-offset: -3px;
+}
+.floating-dock-position {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.floating-dock {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 2px;
+  padding-inline: 6px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 2px 3px var(--shadow-subtle);
+  pointer-events: auto;
+}
+.dock-tab {
+  position: relative;
+  display: flex;
+  min-width: 44px;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.dock-tab:focus-visible {
+  outline-offset: -2px;
+}
+.dock-selection {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: var(--highlight);
+}
+@media (min-width: 560px) {
+  .mobile-experience {
+    --sheet-gutter: 32px;
+  }
+  .mobile-event-name {
+    font-size: 72px;
+  }
+}
+@media (max-width: 359px) {
+  .mobile-experience {
+    --sheet-gutter: 20px;
+  }
+  .mobile-hero h1 {
+    font-size: 28px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .information-sheet {
+    will-change: auto;
+  }
+}

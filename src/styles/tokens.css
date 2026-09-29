@@ -1,0 +1,123 @@
+/* Primitive palette. The two brand colors are sampled from the supplied logo. */
+:root {
+  --brand-blue: #3f57d2;
+  --brand-yellow: #ffd15f;
+  --blue-50: #eff2ff;
+  --blue-100: #e1e7ff;
+  --blue-200: #c4ceff;
+  --blue-300: #a3b4ff;
+  --blue-600: #3448b8;
+  --blue-800: #22316f;
+  --blue-900: #1a244a;
+  --yellow-100: #fff3cf;
+  --yellow-200: #ffe6a1;
+  --yellow-600: #d7a73c;
+  --yellow-950: #46391d;
+  --neutral-0: #ffffff;
+  --neutral-50: #f7f8fc;
+  --neutral-200: #d8deed;
+  --neutral-400: #aab4ca;
+  --neutral-600: #5c6780;
+  --neutral-700: #303c56;
+  --neutral-900: #171f31;
+  --neutral-925: #121a2b;
+  --neutral-950: #0e1422;
+  --neutral-1000: #000000;
+  --viewer-foreground: var(--neutral-0);
+  --viewer-background: color-mix(in srgb, var(--neutral-950) 97%, transparent);
+  --viewer-backdrop: color-mix(in srgb, var(--neutral-950) 70%, transparent);
+  --viewer-control: color-mix(in srgb, var(--neutral-0) 14%, transparent);
+  --viewer-control-hover: color-mix(in srgb, var(--neutral-0) 25%, transparent);
+}
+
+/* Semantic roles. Components consume these rather than palette names. */
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+  --grad42-wordmark-primary: #1b1b22;
+  --grad42-wordmark-secondary: #464652;
+  --background: var(--neutral-50);
+  --foreground: var(--blue-900);
+  --surface: var(--blue-50);
+  --card: var(--neutral-0);
+  --muted: var(--neutral-600);
+  --border: var(--neutral-200);
+  --primary: var(--brand-blue);
+  --primary-hover: var(--blue-600);
+  --primary-foreground: var(--neutral-0);
+  --accent: var(--brand-yellow);
+  --accent-hover: var(--yellow-200);
+  --accent-foreground: var(--blue-900);
+  --accent-soft: var(--yellow-100);
+  --highlight: var(--brand-yellow);
+  --brand-panel: var(--brand-blue);
+  --panel-foreground: var(--neutral-0);
+  --panel-muted: var(--blue-100);
+  --panel-accent: var(--yellow-200);
+  --panel-border: color-mix(in srgb, var(--neutral-0) 24%, transparent);
+  --seat: color-mix(in srgb, var(--neutral-0) 18%, var(--brand-panel));
+  --seat-foreground: var(--blue-100);
+  --focus: var(--brand-blue);
+  --table-edge: var(--yellow-600);
+  --shadow-color: color-mix(in srgb, var(--blue-900) 25%, transparent);
+  --shadow-subtle: color-mix(in srgb, var(--blue-900) 4%, transparent);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --grad42-wordmark-primary: #e2e1eb;
+  --grad42-wordmark-secondary: #abaab8;
+  --background: var(--neutral-950);
+  --foreground: var(--blue-50);
+  --surface: var(--neutral-925);
+  --card: var(--neutral-900);
+  --muted: var(--neutral-400);
+  --border: var(--neutral-700);
+  --primary: var(--blue-300);
+  --primary-hover: var(--blue-200);
+  --primary-foreground: var(--neutral-950);
+  --accent: var(--brand-yellow);
+  --accent-hover: var(--yellow-200);
+  --accent-foreground: var(--blue-900);
+  --accent-soft: var(--yellow-950);
+  --highlight: var(--yellow-950);
+  --brand-panel: var(--blue-800);
+  --panel-foreground: var(--neutral-0);
+  --panel-muted: var(--blue-100);
+  --panel-accent: var(--brand-yellow);
+  --panel-border: color-mix(in srgb, var(--neutral-0) 24%, transparent);
+  --seat: color-mix(in srgb, var(--neutral-0) 14%, var(--brand-panel));
+  --seat-foreground: var(--blue-100);
+  --focus: var(--blue-300);
+  --table-edge: var(--yellow-600);
+  --shadow-color: color-mix(in srgb, var(--neutral-1000) 36%, transparent);
+  --shadow-subtle: color-mix(in srgb, var(--neutral-1000) 16%, transparent);
+}
+
+/* Tailwind v4 aliases resolve on the consuming element in either theme. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-brand-panel: var(--brand-panel);
+  --color-panel-foreground: var(--panel-foreground);
+  --color-panel-muted: var(--panel-muted);
+  --color-panel-accent: var(--panel-accent);
+  --color-panel-border: var(--panel-border);
+  --color-seat: var(--seat);
+  --color-seat-foreground: var(--seat-foreground);
+  --color-focus: var(--focus);
+  --color-shadow: var(--shadow-color);
+}
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
