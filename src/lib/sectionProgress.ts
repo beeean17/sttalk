@@ -16,7 +16,8 @@ export function progressLine(topInset: number, viewportHeight: number) {
   return topInset + (viewportHeight - topInset) * 0.35
 }
 
-// 모바일 하단 내비는 첫 섹션(행사 소개)에서만 라벨을 펼친다.
-export function dockState(activeIndex: number): 'expanded' | 'compact' {
-  return activeIndex === 0 ? 'expanded' : 'compact'
+// 가로로 넘기는 탭 화면에서, 스크롤 위치에 가장 가까운 탭을 고른다.
+export function pagerIndex(scrollLeft: number, pageWidth: number, count: number) {
+  if (pageWidth <= 0 || count <= 0) return 0
+  return Math.max(0, Math.min(count - 1, Math.round(scrollLeft / pageWidth)))
 }

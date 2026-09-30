@@ -8,12 +8,14 @@ type GalleryViewerProps = {
   items?: GalleryItem[]
   initialIndex: number | null
   onClose: () => void
+  label?: string
 }
 
 export default function GalleryViewer({
   items = galleryItems,
   initialIndex,
   onClose,
+  label = '지난 ST:talk 사진 확대 보기',
 }: GalleryViewerProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const swipe = useRef<{ id: number; x: number; y: number } | null>(null)
@@ -67,7 +69,7 @@ export default function GalleryViewer({
     <dialog
       ref={dialogRef}
       className="gallery-viewer"
-      aria-label="지난 ST:talk 사진 확대 보기"
+      aria-label={label}
       onCancel={(event) => {
         event.preventDefault()
         onClose()

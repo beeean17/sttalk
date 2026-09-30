@@ -2,15 +2,17 @@ import { useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import AiSummary from './AiSummary'
 import CommitteeWordmark from './CommitteeWordmark'
+import ContactEmail from './ContactEmail'
 import GalleryViewer from './GalleryViewer'
+import TemplateExample from './TemplateExample'
 import ThemeSelect from './ThemeSelect'
 import {
-  alumniRoles,
+  talkTopics,
+  talkTopicsNote,
   contactIntro,
   event,
   galleryIntro,
   heroDescription,
-  mailto,
   prepNote,
   programIntro,
   schedule,
@@ -179,14 +181,10 @@ export default function DesktopLanding() {
           </div>
         </section>
 
-        <section
-          id="alumni-role"
-          className="desktop-stories"
-          aria-labelledby="desktop-alumni-title"
-        >
+        <section id="stories" className="desktop-stories" aria-labelledby="desktop-stories-title">
           <div className="desktop-inner desktop-stories-grid">
             <div className="desktop-stories-lead">
-              <SectionHeading eyebrow="FOR OUR ALUMNI" id="desktop-alumni-title" intro={storyIntro}>
+              <SectionHeading eyebrow="TALK TOPICS" id="desktop-stories-title" intro={storyIntro}>
                 선배님의 이야기가 필요합니다
               </SectionHeading>
               <div className="desktop-topics">
@@ -200,21 +198,25 @@ export default function DesktopLanding() {
               <div className="desktop-note">
                 <strong>사전 준비</strong>
                 <p>{prepNote}</p>
+                <TemplateExample />
               </div>
             </div>
-            <ol className="desktop-roles">
-              {alumniRoles.map((role) => (
-                <li key={role.number}>
-                  <span className="desktop-role-number" aria-hidden="true">
-                    {role.number}
-                  </span>
-                  <div>
-                    <h3>{role.title}</h3>
-                    <p>{role.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
+            <div className="desktop-roles-column">
+              <ol className="desktop-roles">
+                {talkTopics.map((role) => (
+                  <li key={role.number}>
+                    <span className="desktop-role-number" aria-hidden="true">
+                      {role.number}
+                    </span>
+                    <div>
+                      <h3>{role.title}</h3>
+                      <p>{role.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <p className="desktop-roles-note">{talkTopicsNote}</p>
+            </div>
           </div>
         </section>
 
@@ -266,13 +268,15 @@ export default function DesktopLanding() {
                 문의 및 연락
               </SectionHeading>
               <div className="desktop-contact-actions">
-                <a className="desktop-contact-link" href={mailto}>
-                  이메일로 문의하기 <span aria-hidden="true">↗</span>
+                <a
+                  className="desktop-contact-link"
+                  href={event.kakao}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  카카오톡으로 문의하기 <span aria-hidden="true">↗</span>
                 </a>
-                <p className="desktop-contact-email">
-                  <span>이메일</span>
-                  {event.email}
-                </p>
+                <ContactEmail />
               </div>
             </div>
             <div className="desktop-summary">

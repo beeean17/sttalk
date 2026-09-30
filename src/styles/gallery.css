@@ -10,6 +10,9 @@
   border: 0;
   color: var(--viewer-foreground);
   background: var(--viewer-background);
+  /* 이전·다음을 빠르게 누르면 더블 클릭으로 사진과 글자가 선택되므로, 창 전체에서 선택을 막는다. */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .gallery-viewer::backdrop {
@@ -95,4 +98,21 @@
   margin: 0;
   padding-top: 12px;
   text-align: center;
+}
+
+/* 사전 준비 안내 안의 "양식 예시 보기" 글자 버튼. */
+.template-example {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  align-self: flex-start;
+  gap: 6px;
+  margin-block: -4px -10px;
+  color: var(--primary);
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.template-example:hover {
+  text-decoration: underline;
 }

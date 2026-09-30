@@ -185,7 +185,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 40% 50%;
+  object-position: 42% 50%;
 }
 .desktop-facts {
   display: grid;
@@ -402,35 +402,43 @@
   font-size: 14px;
   line-height: 1.65;
 }
-.desktop-roles {
+.desktop-roles-column {
   min-width: 0;
+}
+.desktop-roles {
   border-bottom: 1px solid var(--border);
 }
 .desktop-roles li {
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
+  grid-template-columns: 84px minmax(0, 1fr);
   align-items: center;
-  padding-block: 32px;
+  padding-block: 22px;
   border-top: 1px solid var(--border);
 }
 .desktop-role-number {
   font-family: var(--font-display);
-  font-size: 48px;
+  font-size: 32px;
   line-height: 1;
   font-weight: 800;
   letter-spacing: -0.04em;
 }
 .desktop-roles h3 {
-  font-size: 24px;
-  line-height: 1.3;
+  font-size: 20px;
+  line-height: 1.35;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 .desktop-roles p {
-  margin-top: 8px;
+  margin-top: 4px;
   color: var(--muted);
-  font-size: 16px;
-  line-height: 1.65;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.desktop-roles-note {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 /* 04 지난 현장 */
@@ -503,7 +511,7 @@
 .desktop-contact-grid {
   display: grid;
   grid-template-columns: 1fr;
-  align-items: center;
+  align-items: start;
   gap: 32px;
 }
 .desktop-contact .desktop-section-heading {
@@ -541,21 +549,6 @@
 }
 .desktop-contact-link:hover {
   background: var(--primary-hover);
-}
-.desktop-contact-email {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-family: var(--font-display);
-  font-size: 15px;
-  line-height: 1.4;
-  font-weight: 600;
-}
-.desktop-contact-email span {
-  color: var(--muted);
-  font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 400;
 }
 .desktop-summary {
   min-width: 0;
@@ -662,26 +655,19 @@
     flex-direction: column;
   }
 
-  /* 사진은 헤더 바로 아래에서 화면 오른쪽 끝까지 닿고, 글은 본문 폭에 맞춘다. */
-  .desktop-site main > .desktop-overview {
-    padding-top: 0;
-  }
+  /* 글과 사진을 본문 폭 안에 나란히 놓는다. 사진의 오른쪽 끝은 아래 정보 줄과 맞춘다. */
   .desktop-hero {
     display: grid;
-    width: auto;
+    width: min(1280px, calc(100% - var(--desktop-gutter) * 2));
     min-height: 0;
     flex: 1;
-    grid-template-columns:
-      minmax(var(--desktop-gutter), 1fr) minmax(0, 704px) minmax(0, 576px)
-      minmax(var(--desktop-gutter), 1fr);
+    grid-template-columns: minmax(0, 592fr) minmax(0, 656fr);
     gap: 0;
-    margin-inline: 0;
   }
   .desktop-hero-copy {
-    grid-column: 2;
     justify-content: center;
     gap: clamp(16px, 2.9svh, 26px);
-    padding: clamp(20px, 4svh, 40px) 56px clamp(20px, 4svh, 40px) 0;
+    padding-right: 48px;
   }
   .desktop-hero-name {
     font-size: clamp(64px, 6.1vw, 88px);
@@ -689,11 +675,14 @@
   .desktop-hero-sub {
     font-size: clamp(30px, 2.65vw, 38px);
   }
+  /* 사진은 글 옆 칸을 채우되, 큰 화면에서 세로로 너무 길어지지 않게 높이를 묶는다. */
   .desktop-hero-photo {
+    height: 100%;
     min-height: 240px;
-    grid-column: 3 / -1;
+    max-height: 620px;
+    align-self: center;
     aspect-ratio: auto;
-    border-radius: 0 0 0 40px;
+    border-radius: 28px;
   }
   .desktop-site main > .desktop-overview > .desktop-inner {
     flex: none;
@@ -729,11 +718,11 @@
 
   .desktop-stories-grid {
     grid-template-columns: minmax(0, 440fr) minmax(0, 704fr);
-    align-items: center;
+    align-items: start;
     gap: clamp(48px, 7vw, 104px);
   }
   .desktop-roles li {
-    padding-block: clamp(16px, calc(14svh - 56px), 72px);
+    padding-block: clamp(10px, calc(7svh - 28px), 36px);
   }
 
   .desktop-gallery-grid {
@@ -791,6 +780,9 @@
   .desktop-slot.is-talk .desktop-slot-steps {
     gap: 6px;
     margin-top: 10px;
+  }
+  .desktop-roles li {
+    padding-block: 9px;
   }
 }
 

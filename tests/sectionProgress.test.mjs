@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { activeSectionIndex, dockState, progressLine } from '../src/lib/sectionProgress.ts'
+import { activeSectionIndex, pagerIndex, progressLine } from '../src/lib/sectionProgress.ts'
 
 test('the section that last crossed the line is the current one', () => {
   const line = progressLine(0, 800)
@@ -31,7 +31,12 @@ test('missing sections and empty lists fall back to the first section', () => {
   assert.equal(activeSectionIndex([Infinity, Infinity], 280), 0)
 })
 
-test('the bottom nav shows labels only on the first section', () => {
-  assert.equal(dockState(0), 'expanded')
-  for (const index of [1, 2, 3, 4]) assert.equal(dockState(index), 'compact')
+test('the pager picks the nearest tab and stays within range', () => {
+  assert.equal(pagerIndex(0, 390, 5), 0)
+  assert.equal(pagerIndex(194, 390, 5), 0)
+  assert.equal(pagerIndex(196, 390, 5), 1)
+  assert.equal(pagerIndex(390 * 4, 390, 5), 4)
+  assert.equal(pagerIndex(390 * 9, 390, 5), 4)
+  assert.equal(pagerIndex(-40, 390, 5), 0)
+  assert.equal(pagerIndex(100, 0, 5), 0)
 })

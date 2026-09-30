@@ -12,17 +12,17 @@ export const event = {
   venue: '중앙도서관 1층 ST 아트홀',
   venueHeading: 'ST 아트홀',
   venueFull: '서울과학기술대학교 중앙도서관 1층 ST 아트홀',
+  // 문의는 카카오톡 오픈채팅으로 받고, 이메일은 주소만 보여 준다.
+  kakao: 'https://open.kakao.com/o/sT89waQi',
   email: 'seoultechgrad42@gmail.com',
   scale: '동문 선배님 8–10명 · 테이블당 10인 이하 · 2차시',
 }
-
-export const mailto = `mailto:${event.email}?subject=${encodeURIComponent('[ST:talk] 행사 문의')}`
 
 // 화면 순서. 데스크톱 헤더 메뉴와 모바일 하단 내비가 같은 목록을 쓴다.
 export const siteSections = [
   { id: 'overview', label: '행사 소개', short: '소개' },
   { id: 'how-it-works', label: '진행·일정', short: '진행' },
-  { id: 'alumni-role', label: '선배님 이야기', short: '이야기' },
+  { id: 'stories', label: '선배님 이야기', short: '이야기' },
   { id: 'gallery', label: '지난 현장', short: '현장' },
   { id: 'contact', label: '문의', short: '문의' },
 ] as const
@@ -33,34 +33,58 @@ export const heroDescription =
 export const programIntro =
   '8–10명의 동문 선배님을 모시고, 한 테이블 최대 10명 규모로 두 차례 대화합니다.'
 
-export const storyIntro = '현재 하는 일, 선택과 준비 과정, 학생들의 질문을 중심으로 이야기합니다.'
+export const storyIntro =
+  '학생들의 의견을 모아 다섯 가지 주제로 정리했습니다. 인상 깊었거나 자신 있는 주제 위주로 편하게 이야기해 주세요.'
 export const storyTopicsLabel = '선배님이 직접 겪은 진로 경험이면 충분합니다'
 export const storyTopics = ['취업', '창업', '대학원 진학']
-export const prepNote = '발표 자료를 포함한 사전 준비 사항은 확정 후 별도로 안내드리겠습니다.'
+export const prepNote =
+  '자기소개 양식과 예상 질문 목록은 따로 보내드립니다. 양식에 꼭 맞추지 않고 자유롭게 준비하셔도 됩니다.'
 
 export const galleryIntro = '테이블에서 나눈 이야기와 행사의 분위기를 사진으로 먼저 만나보세요.'
-export const contactIntro = '행사에 관해 궁금한 점은 총졸업준비위원회로 문의해 주세요.'
+export const contactIntro =
+  '행사에 관해 궁금한 점은 총졸업준비위원회 카카오톡 오픈채팅으로 문의해 주세요.'
 
-const [scaleAlumni, ...scaleRest] = event.scale.split(' · ')
+const [scaleGuests, ...scaleRest] = event.scale.split(' · ')
 export const summaryRows = [
   { label: '일시', lines: [event.dateNatural, event.time] },
   { label: '장소', lines: ['서울과학기술대학교', event.venue] },
-  { label: '규모', lines: [scaleAlumni, scaleRest.join(' · ')] },
+  { label: '규모', lines: [scaleGuests, scaleRest.join(' · ')] },
   {
     label: '주최',
     lines: ['서울과학기술대학교', event.organizer.replace('서울과학기술대학교 ', '')],
   },
 ]
 
-export const alumniRoles = [
-  { number: '01', title: '지금 하는 일', description: '현재 맡고 있는 일과 진로를 소개해 주세요.' },
+// 선배님께 부탁드리는 이야기 주제. 위원회가 보내는 자기소개 양식·예상 질문 목록과 같은 순서다.
+export const talkTopics = [
+  {
+    number: '01',
+    title: '자기소개',
+    description: '전공과 직장·직무, 재학 중 활동과 취업 준비 기간을 간단히 소개해 주세요.',
+  },
   {
     number: '02',
-    title: '여기까지의 과정',
-    description: '준비와 선택, 현장에서 얻은 경험을 들려주세요.',
+    title: '직무 선택과 준비 과정',
+    description: '지금의 직무와 직장을 고른 이유와 기준, 정보를 얻은 방법을 들려주세요.',
   },
-  { number: '03', title: '후배들의 질문', description: '학생들의 궁금증에 편하게 답해 주세요.' },
+  {
+    number: '03',
+    title: '자기소개서와 면접',
+    description: '자기소개서 소재와 작성 요령, 면접 준비와 경험을 나눠 주세요.',
+  },
+  {
+    number: '04',
+    title: '회사 생활과 커리어',
+    description: '입사 초기의 적응, 근무 환경, 입사 후 필요한 공부를 이야기해 주세요.',
+  },
+  {
+    number: '05',
+    title: '취업 준비 경험과 조언',
+    description: '준비 기간의 생활, 도움이 된 활동과 제도, 아쉬웠던 점을 전해 주세요.',
+  },
 ]
+export const talkTopicsNote =
+  '조형대학 선배님께는 포트폴리오(작업물 선정, 구성)에 대한 질문도 드립니다.'
 
 // 한 차시의 테이블 토크가 흘러가는 순서. 데스크톱·태블릿 시간표의 1차시 설명에 쓴다.
 export const talkFlow = [
@@ -139,10 +163,10 @@ export const faqs = [
   {
     question: '발표 자료를 미리 준비해야 하나요?',
     answer:
-      '선배님의 경험을 바탕으로 편안하게 대화해 주시면 됩니다. 발표 자료를 포함한 사전 준비 사항은 확정 후 별도로 안내드리겠습니다.',
+      '자기소개 양식과 예상 질문 목록을 따로 보내드립니다. 양식에 꼭 맞추지 않고 자유롭게 준비하시면 되며, 자기소개서나 포트폴리오처럼 도움이 될 자료를 덧붙이셔도 됩니다.',
   },
   {
     question: '행사 문의는 어떻게 하나요?',
-    answer: `행사와 관련해 궁금하신 점은 ${event.email}으로 문의해 주세요.`,
+    answer: `행사와 관련해 궁금하신 점은 카카오톡 오픈채팅(${event.kakao})으로 문의해 주세요. 이메일은 ${event.email}입니다.`,
   },
 ]

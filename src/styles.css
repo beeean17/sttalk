@@ -28,6 +28,9 @@
   }
   button {
     cursor: pointer;
+    /* 빠르게 여러 번 눌러도 버튼 글자나 주변이 선택되지 않게 한다. */
+    -webkit-user-select: none;
+    user-select: none;
   }
   :focus-visible {
     outline: 2px solid var(--focus);

@@ -7,7 +7,7 @@ export type GalleryItem = {
   height: number
   title: string
   year: string
-  kind: 'photo' | 'poster' | 'banner'
+  kind: 'photo' | 'poster' | 'banner' | 'slide'
   alt: string
 }
 

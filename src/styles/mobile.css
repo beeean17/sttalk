@@ -1,13 +1,43 @@
-/* 모바일·폴드: 서랍 없이 다섯 섹션을 한 페이지로 스크롤하고, 하단 내비로 이동한다. */
+/* 모바일·폴드: 다섯 탭을 좌우로 넘기고, 각 탭 안에서만 세로로 스크롤한다. 하단 내비로도 이동한다. */
 .mobile-page {
   --gutter: 24px;
   /* 본문은 640px까지만 넓어지고, 그보다 넓은 화면에서는 가운데에 놓인다. */
   --inline: max(var(--gutter), calc((100% - 640px) / 2));
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 112px);
+  /* 내비에 가려지지 않도록 각 탭 맨 아래에 두는 여백. */
+  --dock-clearance: calc(env(safe-area-inset-bottom) + 112px);
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   background: var(--background);
   color: var(--foreground);
+}
+.mobile-pager {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.mobile-pager::-webkit-scrollbar {
+  display: none;
+}
+.mobile-panel {
+  min-width: 0;
+  height: 100%;
+  flex: 0 0 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.mobile-panel:focus-visible {
+  outline-offset: -3px;
 }
 .mobile-loading {
   width: 100%;
@@ -29,11 +59,10 @@
   letter-spacing: 0.08em;
 }
 
-/* 01 행사 소개: 첫 화면을 채우고, 남는 높이는 사진이 차지한다. */
+/* 01 행사 소개: 화면 높이를 채우고, 남는 높이는 사진이 차지한다. */
 .mobile-overview {
   display: flex;
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: 100%;
   flex-direction: column;
 }
 .mobile-brand {
@@ -127,7 +156,7 @@
 
 /* 02–05 공통 */
 .mobile-section {
-  padding: 40px var(--inline) 0;
+  padding: max(40px, calc(env(safe-area-inset-top) + 24px)) var(--inline) var(--dock-clearance);
 }
 .mobile-section-heading {
   display: flex;
@@ -277,27 +306,33 @@
 }
 .mobile-roles li {
   display: grid;
-  grid-template-columns: 60px minmax(0, 1fr);
+  grid-template-columns: 48px minmax(0, 1fr);
   align-items: center;
-  padding-block: 20px;
+  padding-block: 16px;
   border-top: 1px solid var(--border);
 }
 .mobile-role-number {
   font-family: var(--font-display);
-  font-size: 32px;
+  font-size: 24px;
   line-height: 1;
   font-weight: 800;
   letter-spacing: -0.04em;
 }
 .mobile-roles h3 {
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.35;
   font-weight: 700;
 }
 .mobile-roles p {
   margin-top: 4px;
   color: var(--muted);
-  font-size: 14.5px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.mobile-roles-note {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 12.5px;
   line-height: 1.6;
 }
 .mobile-topics {
@@ -424,21 +459,7 @@
   font-weight: 700;
 }
 .mobile-contact-email {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2px 10px;
   margin-top: 14px;
-  font-family: var(--font-display);
-  font-size: 15px;
-  line-height: 1.4;
-  font-weight: 600;
-}
-.mobile-contact-email span {
-  color: var(--muted);
-  font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 400;
 }
 .mobile-summary {
   margin-top: 28px;
@@ -504,7 +525,7 @@
   gap: 10px;
 }
 
-/* 하단 내비. 선택 표시는 탭 하나 폭의 알약이 옆으로 미끄러진다. */
+/* 하단 내비. 선택 표시는 탭 하나 폭의 알약이며, 화면을 넘기는 만큼 옆으로 따라 움직인다. */
 .floating-dock-position {
   position: fixed;
   z-index: 30;
@@ -542,9 +563,7 @@
   border-radius: 24px;
   background: var(--highlight);
   transform: translate(calc(var(--dock-active, 0) * (100% + 2px)), -50%);
-  transition:
-    transform 0.3s ease-out,
-    height 0.3s ease-out;
+  transition: height 0.3s ease-out;
 }
 .dock-tab {
   position: relative;
@@ -563,7 +582,7 @@
     height 0.3s ease-out,
     color 0.2s;
 }
-.dock-tab[aria-current] {
+.dock-tab[aria-selected='true'] {
   color: var(--dock-selected-foreground);
 }
 .dock-tab:focus-visible {
@@ -580,7 +599,7 @@
     margin-top 0.2s,
     opacity 0.2s;
 }
-.dock-tab[aria-current] .dock-label {
+.dock-tab[aria-selected='true'] .dock-label {
   font-weight: 700;
 }
 .mobile-page[data-nav-state='compact'] .floating-dock {

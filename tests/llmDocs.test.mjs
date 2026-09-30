@@ -1,7 +1,15 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
-import { alumniRoles, event, faqs, prepNote, schedule, talkFlow } from '../src/data/event.ts'
+import {
+  talkTopics,
+  talkTopicsNote,
+  event,
+  faqs,
+  prepNote,
+  schedule,
+  talkFlow,
+} from '../src/data/event.ts'
 import { fullPrompt, linkPrompt, llmDocPaths, llmIndexPath, siteUrl } from '../src/data/llm.ts'
 
 // AI용 안내 문서(public/)는 손으로 쓰므로, 화면이 쓰는 데이터와 어긋나지 않는지 확인한다.
@@ -20,7 +28,14 @@ test('the routing page links to every document at its deployed address', () => {
 
 test('the routing page and the overview carry the confirmed event facts', () => {
   for (const text of [index, docs['llm/event.md']]) {
-    for (const fact of [event.dateNatural, event.time, event.venueFull, event.email, event.scale])
+    for (const fact of [
+      event.dateNatural,
+      event.time,
+      event.venueFull,
+      event.kakao,
+      event.email,
+      event.scale,
+    ])
       assert(text.includes(fact), fact)
     assert(text.includes(event.organizer))
   }
@@ -37,9 +52,9 @@ test('the programme document matches the on-screen timetable', () => {
   for (const step of talkFlow) assert(text.includes(step), step)
 })
 
-test('the FAQ document matches the alumni requests and questions', () => {
+test('the FAQ document matches the talk topics and questions', () => {
   const text = docs['llm/faq.md']
-  for (const role of alumniRoles) {
+  for (const role of talkTopics) {
     assert(text.includes(role.title), role.title)
     assert(text.includes(role.description), role.description)
   }
@@ -47,6 +62,7 @@ test('the FAQ document matches the alumni requests and questions', () => {
     assert(text.includes(faq.question), faq.question)
     assert(text.includes(faq.answer), faq.answer)
   }
+  assert(text.includes(talkTopicsNote))
   assert(text.includes(prepNote))
 })
 
