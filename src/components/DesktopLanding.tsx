@@ -1,13 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CommitteeWordmark from './CommitteeWordmark'
 import GalleryViewer from './GalleryViewer'
 import ThemeSelect from './ThemeSelect'
 import { alumniRoles, event, mailto, programSteps, schedule } from '../data/event'
 import { galleryArchive, galleryItems } from '../data/gallery'
+import useMediaQuery from '../hooks/useMediaQuery'
 import '../styles/desktop.css'
 
 const seatStudentImage = `${import.meta.env.BASE_URL}images/seat-student.svg`
 const seatAlumniImage = `${import.meta.env.BASE_URL}images/seat-alumni.svg`
+
+const desktopSlides = [
+  { id: 'overview', label: '행사 소개' },
+  { id: 'how-it-works', label: '진행 방식' },
+  { id: 'gallery', label: '지난 ST:talk 현장' },
+  { id: 'gallery-promo', label: '지난 행사 홍보 자료' },
+  { id: 'alumni-role', label: '선배님 역할' },
+  { id: 'time-and-place', label: '일정·장소' },
+  { id: 'contact', label: '문의 및 연락' },
+] as const
 
 function SectionHeading({
   eyebrow,
@@ -73,6 +84,44 @@ function SeatingDiagram() {
 
 export default function DesktopLanding() {
   const [viewerIndex, setViewerIndex] = useState<number | null>(null)
+  const [activeSlide, setActiveSlide] = useState(0)
+  const siteRef = useRef<HTMLDivElement>(null)
+  const slideMode = useMediaQuery('(min-width: 1024px) and (min-height: 600px)')
+
+  useEffect(() => {
+    if (!slideMode) return
+    const root = siteRef.current
+    if (!root) return
+    let frame = 0
+    const update = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const headerHeight =
+          root.querySelector<HTMLElement>('.desktop-header')?.getBoundingClientRect().height ?? 0
+        let closest = 0
+        let distance = Number.POSITIVE_INFINITY
+        desktopSlides.forEach((slide, index) => {
+          const section = document.getElementById(slide.id)
+          if (!section) return
+          const nextDistance = Math.abs(section.getBoundingClientRect().top - headerHeight)
+          if (nextDistance < distance) {
+            closest = index
+            distance = nextDistance
+          }
+        })
+        setActiveSlide(closest)
+      })
+    }
+    update()
+    root.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      cancelAnimationFrame(frame)
+      root.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [slideMode])
+
   const galleryImage = (index: number, className = '') => {
     const item = galleryItems[index]
     if (!item) return null
@@ -106,7 +155,7 @@ export default function DesktopLanding() {
   }
 
   return (
-    <div className="desktop-site" id="top">
+    <div ref={siteRef} className="desktop-site" id="top">
       <a className="desktop-skip" href="#desktop-main">
         본문 바로가기
       </a>
@@ -325,7 +374,9 @@ export default function DesktopLanding() {
               문의 및 연락
             </SectionHeading>
             <p>행사에 관해 궁금한 점은 총졸업준비위원회로 문의해 주세요.</p>
-            <a href={mailto}>{event.email}</a>
+            <a className="desktop-contact-link" href={mailto}>
+              이메일로 문의하기 <span aria-hidden="true">↗</span>
+            </a>
             <p className="desktop-organizer">주최&nbsp; {event.organizer}</p>
           </div>
           <footer className="desktop-footer">
@@ -343,6 +394,29 @@ export default function DesktopLanding() {
           </footer>
         </section>
       </main>
+      {slideMode && (
+        <nav className="desktop-slide-cta" aria-label="프레젠테이션 화면 이동">
+          <span
+            className="desktop-slide-progress"
+            aria-label={`${activeSlide + 1} / ${desktopSlides.length} 화면`}
+          >
+            {String(activeSlide + 1).padStart(2, '0')}
+            <span aria-hidden="true"> / {String(desktopSlides.length).padStart(2, '0')}</span>
+          </span>
+          <a
+            href={`#${desktopSlides[activeSlide === desktopSlides.length - 1 ? 0 : activeSlide + 1].id}`}
+            className="desktop-slide-next"
+          >
+            <span>{activeSlide === desktopSlides.length - 1 ? '처음으로' : '다음'}</span>
+            <strong>
+              {desktopSlides[activeSlide === desktopSlides.length - 1 ? 0 : activeSlide + 1].label}
+            </strong>
+            <span className="desktop-slide-arrow" aria-hidden="true">
+              {activeSlide === desktopSlides.length - 1 ? '↑' : '↓'}
+            </span>
+          </a>
+        </nav>
+      )}
       <GalleryViewer
         items={galleryItems}
         initialIndex={viewerIndex}
