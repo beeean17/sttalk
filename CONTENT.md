@@ -50,4 +50,4 @@
 
 날짜·시간·장소·문의 주소·진행 단계·시간표는 `src/data/event.ts`, 갤러리 자료와 과거 행사 안내 문구는 `src/data/gallery.ts`에서 공통 관리합니다. 두 화면은 이 데이터를 읽어 표시합니다. 이미지의 출처와 디자인 기록은 [FIGMA.md](./FIGMA.md), 모바일 내비 동작은 [MOBILE_INTERACTION.md](./MOBILE_INTERACTION.md)에 기록했습니다.
 
-AI 챗봇에게 요약을 맡기려는 분을 위해 같은 내용을 `public/llms.txt`와 `public/llm/*.md`에도 글로 정리해 둡니다. 이 문서들도 위 표현 원칙을 따르며, 확정되지 않은 내용은 "정해지지 않음"으로 적습니다. 행사 정보가 바뀌면 `src/data/event.ts`와 이 문서들을 함께 고칩니다.
+LLM 모델(ChatGPT, Claude 등)에게 요약을 맡기려는 분을 위해 같은 내용을 `public/llms.txt`와 `public/llm/*.md`에도 글로 정리해 둡니다. 이 문서들도 위 표현 원칙을 따르며, 확정되지 않은 내용은 "정해지지 않음"으로 적습니다. 행사 정보가 바뀌면 `src/data/event.ts`와 이 문서들을 함께 고칩니다.

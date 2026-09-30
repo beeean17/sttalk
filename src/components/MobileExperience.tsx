@@ -448,7 +448,7 @@ export default function MobileExperience() {
               {replyNote}
             </p>
             <a className="mobile-contact-link" href={event.kakao} target="_blank" rel="noreferrer">
-              카카오톡으로 문의하기 <span aria-hidden="true">↗</span>
+              카카오톡 오픈채팅 <span aria-hidden="true">↗</span>
             </a>
             <div className="mobile-contact-email">
               <ContactEmail />

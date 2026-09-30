@@ -281,7 +281,7 @@ export default function DesktopLanding() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  카카오톡으로 문의하기 <span aria-hidden="true">↗</span>
+                  카카오톡 오픈채팅 <span aria-hidden="true">↗</span>
                 </a>
                 <ContactEmail />
               </div>

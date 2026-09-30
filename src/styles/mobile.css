@@ -279,7 +279,8 @@
 .mobile-slot-steps li > span:first-child {
   width: 12px;
   flex: none;
-  color: var(--primary);
+  /* 파란 칸 위의 작은 숫자라, 원색보다 한 단계 진하게 해서 대비를 맞춘다. */
+  color: color-mix(in srgb, var(--primary) 80%, var(--foreground));
   font-family: var(--font-display);
   font-size: 13px;
   font-weight: 700;

@@ -109,7 +109,8 @@ export default function AiSummary({ className = '' }: { className?: string }) {
                 </button>
               </div>
               <p className="ai-summary__lead">
-                아래 문장을 복사해 평소 쓰는 AI 챗봇에 붙여 넣으면 이 사이트의 내용을 요약해 줍니다.
+                아래 문장을 복사해 평소 쓰는 LLM 모델(ChatGPT, Claude 등)에 붙여 넣으면 이 사이트의
+                내용을 요약해 줍니다.
               </p>
               <textarea
                 ref={promptRef}
@@ -134,7 +135,7 @@ export default function AiSummary({ className = '' }: { className?: string }) {
                   <small>
                     {documents === 'failed'
                       ? '문서를 불러오지 못했습니다. 링크만 담은 문장을 써 주세요.'
-                      : '주소를 열지 못하는 AI에 쓸 때 켜 주세요.'}
+                      : 'LLM이 문장 마지막의 주소를 읽지 못할 경우 켜 주세요.'}
                   </small>
                 </span>
               </label>
