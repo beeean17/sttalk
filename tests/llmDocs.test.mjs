@@ -33,6 +33,7 @@ test('the routing page and the overview carry the confirmed event facts', () => 
       event.time,
       event.venueFull,
       event.kakao,
+      event.replyBy,
       event.email,
       event.scale,
     ])

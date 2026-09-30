@@ -13,6 +13,7 @@ import {
   galleryIntro,
   heroDescription,
   prepNote,
+  replyNote,
   programIntro,
   schedule,
   siteSections,
@@ -142,7 +143,7 @@ export default function DesktopLanding() {
         <section id="how-it-works" className="desktop-program" aria-labelledby="desktop-how-title">
           <div className="desktop-inner">
             <SectionHeading eyebrow="HOW IT WORKS" id="desktop-how-title" intro={programIntro}>
-              가까이 앉아, 깊이 나누는 대화
+              진행 방식과 시간표
             </SectionHeading>
             <div className="desktop-timeline-head">
               <h3>진행 시간표</h3>
@@ -184,7 +185,7 @@ export default function DesktopLanding() {
           <div className="desktop-inner desktop-stories-grid">
             <div className="desktop-stories-lead">
               <SectionHeading eyebrow="TALK TOPICS" id="desktop-stories-title" intro={storyIntro}>
-                선배님의 이야기가 필요합니다
+                선배님 이야기 주제
               </SectionHeading>
               <div className="desktop-topics">
                 <p>{storyTopicsLabel}</p>
@@ -253,7 +254,6 @@ export default function DesktopLanding() {
                     alt={item.alt}
                     loading="lazy"
                   />
-                  <span className="desktop-gallery-caption">{item.title}</span>
                 </button>
               ))}
             </div>
@@ -266,6 +266,12 @@ export default function DesktopLanding() {
               <SectionHeading eyebrow="CONTACT" id="desktop-contact-title" intro={contactIntro}>
                 문의 및 연락
               </SectionHeading>
+              <p className="desktop-contact-deadline">
+                <strong>
+                  <time dateTime={event.replyByISO}>{event.replyBy}</time>까지
+                </strong>{' '}
+                {replyNote}
+              </p>
               <div className="desktop-contact-actions">
                 <a
                   className="desktop-contact-link"
@@ -300,6 +306,7 @@ export default function DesktopLanding() {
         items={galleryItems}
         initialIndex={viewerIndex}
         onClose={() => setViewerIndex(null)}
+        caption={false}
       />
     </div>
   )

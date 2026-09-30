@@ -9,6 +9,8 @@ type GalleryViewerProps = {
   initialIndex: number | null
   onClose: () => void
   label?: string
+  // 사진 아래에 제목을 적을지. 현장 사진은 설명 없이 보여 준다.
+  caption?: boolean
 }
 
 export default function GalleryViewer({
@@ -16,6 +18,7 @@ export default function GalleryViewer({
   initialIndex,
   onClose,
   label = '지난 ST:talk 사진 확대 보기',
+  caption = true,
 }: GalleryViewerProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const swipe = useRef<{ id: number; x: number; y: number } | null>(null)
@@ -144,7 +147,7 @@ export default function GalleryViewer({
             </button>
           )}
         </div>
-        <p className="gallery-viewer__caption">{item.title}</p>
+        {caption && <p className="gallery-viewer__caption">{item.title}</p>}
       </div>
     </dialog>,
     document.body,

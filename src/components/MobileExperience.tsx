@@ -14,6 +14,7 @@ import {
   galleryIntro,
   heroDescription,
   prepNote,
+  replyNote,
   programIntro,
   schedule,
   siteSections,
@@ -249,6 +250,10 @@ export default function MobileExperience() {
       >
         본문 바로가기
       </a>
+      {/* 위원회 워드마크는 모든 탭에서 제자리에 있고, 그 아래 내용만 좌우로 넘어간다. */}
+      <header className="mobile-brand">
+        <CommitteeWordmark />
+      </header>
       <main id="mobile-main" ref={pagerRef} className="mobile-pager">
         <Panel
           id="overview"
@@ -258,9 +263,6 @@ export default function MobileExperience() {
           }}
         >
           <section className="mobile-overview" aria-labelledby="mobile-hero-title">
-            <header className="mobile-brand">
-              <CommitteeWordmark />
-            </header>
             <div className="mobile-hero-copy">
               <p className="mobile-eyebrow">{event.year} ST:TALK / 동문 선배 초청</p>
               <h1 id="mobile-hero-title">
@@ -312,7 +314,7 @@ export default function MobileExperience() {
         >
           <section className="mobile-section" aria-labelledby="mobile-how-title">
             <SectionHeading eyebrow="HOW IT WORKS" id="mobile-how-title" intro={programIntro}>
-              가까이 앉아, 깊이 나누는 대화
+              진행 방식과 시간표
             </SectionHeading>
             <div className="mobile-timeline-head">
               <h3>진행 시간표</h3>
@@ -361,7 +363,7 @@ export default function MobileExperience() {
         >
           <section className="mobile-section" aria-labelledby="mobile-stories-title">
             <SectionHeading eyebrow="TALK TOPICS" id="mobile-stories-title" intro={storyIntro}>
-              선배님의 이야기가 필요합니다
+              선배님 이야기 주제
             </SectionHeading>
             <ol className="mobile-roles">
               {talkTopics.map((role) => (
@@ -423,7 +425,6 @@ export default function MobileExperience() {
                     alt={item.alt}
                     loading="lazy"
                   />
-                  <span className="mobile-gallery-caption">{item.title}</span>
                 </button>
               ))}
             </div>
@@ -442,6 +443,12 @@ export default function MobileExperience() {
             <SectionHeading eyebrow="CONTACT" id="mobile-contact-title" intro={contactIntro}>
               문의 및 연락
             </SectionHeading>
+            <p className="mobile-contact-deadline">
+              <strong>
+                <time dateTime={event.replyByISO}>{event.replyBy}</time>까지
+              </strong>{' '}
+              {replyNote}
+            </p>
             <a className="mobile-contact-link" href={event.kakao} target="_blank" rel="noreferrer">
               카카오톡으로 문의하기 <span aria-hidden="true">↗</span>
             </a>
@@ -517,6 +524,7 @@ export default function MobileExperience() {
         items={galleryItems}
         initialIndex={viewerIndex}
         onClose={() => setViewerIndex(null)}
+        caption={false}
       />
     </div>
   )

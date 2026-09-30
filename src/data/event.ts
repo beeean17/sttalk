@@ -12,7 +12,10 @@ export const event = {
   venue: '중앙도서관 1층 ST 아트홀',
   venueHeading: 'ST 아트홀',
   venueFull: '서울과학기술대학교 중앙도서관 1층 ST 아트홀',
-  // 문의는 카카오톡 오픈채팅으로 받고, 이메일은 주소만 보여 준다.
+  // 참여 여부를 알려 달라고 부탁드리는 기한.
+  replyBy: '10월 15일(목)',
+  replyByISO: '2026-10-15',
+  // 문의와 회신은 카카오톡 오픈채팅으로 받고, 이메일은 주소만 보여 준다.
   kakao: 'https://open.kakao.com/o/sT89waQi',
   email: 'seoultechgrad42@gmail.com',
   scale: '동문 선배님 8–10명 · 테이블당 10인 이하 · 2차시',
@@ -43,6 +46,7 @@ export const prepNote =
 export const galleryIntro = '테이블에서 나눈 이야기와 행사의 분위기를 사진으로 먼저 만나보세요.'
 export const contactIntro =
   '행사에 관해 궁금한 점은 총졸업준비위원회 카카오톡 오픈채팅으로 문의해 주세요.'
+export const replyNote = '참여 여부를 카카오톡 오픈채팅으로 답변 부탁드립니다.'
 
 const [scaleGuests, ...scaleRest] = event.scale.split(' · ')
 export const summaryRows = [
@@ -164,6 +168,10 @@ export const faqs = [
     question: '발표 자료를 미리 준비해야 하나요?',
     answer:
       '자기소개 양식과 예상 질문 목록을 따로 보내드립니다. 양식에 꼭 맞추지 않고 자유롭게 준비하시면 되며, 자기소개서나 포트폴리오처럼 도움이 될 자료를 덧붙이셔도 됩니다.',
+  },
+  {
+    question: '참여 여부는 언제까지 알려 드려야 하나요?',
+    answer: `${event.replyBy}까지 카카오톡 오픈채팅(${event.kakao})으로 답변 부탁드립니다.`,
   },
   {
     question: '행사 문의는 어떻게 하나요?',
