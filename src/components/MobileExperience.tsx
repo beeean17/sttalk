@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, PointerEvent } from 'react'
-import { animate, motion, useMotionValue, useTransform } from 'motion/react'
+import { animate, MotionConfig, motion, useMotionValue, useTransform } from 'motion/react'
 import { CalendarDays, Images, MessagesSquare, Sparkles } from 'lucide-react'
 import CommitteeWordmark from './CommitteeWordmark'
 import ThemeSelect from './ThemeSelect'
@@ -43,7 +43,7 @@ const tabs = [
     id: 'schedule',
     label: '일정',
     heading: '행사 일정',
-    preview: '11월 20일 금요일, 저녁 7시부터 9시까지',
+    preview: `${event.dateNatural}, ${event.timeNatural}`,
     Icon: CalendarDays,
   },
 ] as const
@@ -61,7 +61,7 @@ function routeFromHash(): { tab: TabId; stage: SheetStage } {
   return { tab: 'program', stage: 'peek' }
 }
 
-export default function MobileExperience() {
+function MobileExperienceContent() {
   const initial = useRef(routeFromHash()).current
   const [tab, setTab] = useState<TabId>(initial.tab)
   const [stage, setStage] = useState<SheetStage>(initial.stage)
@@ -217,7 +217,7 @@ export default function MobileExperience() {
     tabRefs.current[tabs[next].id]?.focus({ preventScroll: true })
   }
 
-  function startDrag(e: PointerEvent<HTMLButtonElement>) {
+  function startDrag(e: PointerEvent<HTMLElement>) {
     if (!e.isPrimary || e.button !== 0) return
     settleRef.current?.stop()
     ignoreClick.current = false
@@ -232,7 +232,7 @@ export default function MobileExperience() {
     e.currentTarget.setPointerCapture(e.pointerId)
   }
 
-  function drag(e: PointerEvent<HTMLButtonElement>) {
+  function drag(e: PointerEvent<HTMLElement>) {
     const g = gesture.current
     if (!g || g.id !== e.pointerId) return
     const delta = e.clientY - g.y
@@ -246,7 +246,7 @@ export default function MobileExperience() {
     progress.set(progressAtTop(g.top + delta, geometryRef.current.tops))
   }
 
-  function finishDrag(e: PointerEvent<HTMLButtonElement>, cancelled = false) {
+  function finishDrag(e: PointerEvent<HTMLElement>, cancelled = false) {
     const g = gesture.current
     if (!g || g.id !== e.pointerId) return
     gesture.current = null
@@ -299,31 +299,27 @@ export default function MobileExperience() {
           <CommitteeWordmark />
         </header>
         <div className="mobile-hero">
-          <p className="text-[11px] leading-[1.55] font-bold text-primary">
-            2026&nbsp; · &nbsp;ALUMNI TABLE TALK
+          <p className="mobile-eyebrow font-bold text-primary">
+            {event.year}&nbsp; · &nbsp;ALUMNI TABLE TALK
           </p>
           <p className="mobile-event-name font-bold text-primary">ST:talk</p>
-          <h1 className="text-[30px] leading-[1.35] font-bold">
+          <h1 className="mobile-title font-bold">
             진로의 다음 장,
             <br className="fold:hidden" />
             <span className="hidden fold:inline"> </span>선배의 경험에서.
           </h1>
-          <p className="text-[14px] leading-[28.7px] text-muted">
-            동문 선배와 재학생이 마주 앉아 나누는
+          <div className="mobile-event-card flex flex-col gap-1.5 rounded-2xl bg-surface p-4">
+            <p className="mobile-event-date font-bold">
+              <time dateTime={event.dateISO}>{event.dateNatural}</time>&nbsp; · &nbsp;{event.time}
+            </p>
+            <p className="mobile-event-venue text-muted">{event.venueFull}</p>
+          </div>
+          <p className="mobile-description text-muted">
+            동문 선배님과 재학생이 마주 앉아 나누는
             <br />
             취업 · 창업 · 대학원 진학 이야기
           </p>
-          <div className="flex flex-col gap-1.5 rounded-2xl bg-surface p-4">
-            <p className="text-[14px] leading-[1.55] font-bold">
-              <time dateTime={event.dateISO}>2026. 11. 20. 금요일</time>&nbsp; · &nbsp;{event.time}
-            </p>
-            <p className="text-[12px] leading-[21.6px] text-muted">
-              서울과학기술대학교 {event.venue}
-            </p>
-          </div>
-          <p className="text-[11px] leading-[16.5px] text-muted">
-            동문 선배 8–10명&nbsp; · &nbsp;테이블당 10인 이하&nbsp; · &nbsp;2차시
-          </p>
+          <p className="mobile-summary text-muted">{event.scale}</p>
         </div>
       </main>
 
@@ -366,18 +362,38 @@ export default function MobileExperience() {
         >
           <span aria-hidden="true" className="h-1 w-9 rounded-full bg-muted opacity-35" />
         </button>
-        <div className="sheet-heading">
-          <h2 className="min-w-0 flex-1 text-[18px] leading-[1.55] font-bold">{active.heading}</h2>
-        </div>
+        <button
+          type="button"
+          className="sheet-heading"
+          aria-label={`${active.heading} 서랍 ${stage === 'peek' ? '펼치기' : '드래그 영역'}`}
+          aria-controls="sheet-detail"
+          aria-expanded={stage !== 'peek'}
+          onPointerDown={startDrag}
+          onPointerMove={drag}
+          onPointerUp={(e) => finishDrag(e)}
+          onPointerCancel={(e) => finishDrag(e, true)}
+          onLostPointerCapture={(e) => finishDrag(e, true)}
+          onClick={() => {
+            if (ignoreClick.current) {
+              ignoreClick.current = false
+              return
+            }
+            if (stage === 'peek') moveTo(tab, 'half')
+          }}
+        >
+          <h2>{active.heading}</h2>
+        </button>
         {stage === 'peek' && !dragging && (
-          <p
+          <button
+            type="button"
             id="sheet-preview"
-            role="tabpanel"
             aria-labelledby={`tab-${tab}`}
-            className="sheet-preview text-[12px] leading-[21.6px] text-muted"
+            aria-controls="sheet-detail"
+            className="sheet-preview text-muted"
+            onClick={() => moveTo(tab, 'half')}
           >
             {active.preview}
-          </p>
+          </button>
         )}
         <motion.div
           id="sheet-detail"
@@ -412,6 +428,7 @@ export default function MobileExperience() {
 
       <div className="floating-dock-position" style={{ bottom: geometry.dockBottom }}>
         <motion.nav
+          initial={false}
           role="tablist"
           aria-label="행사 정보"
           className="floating-dock"
@@ -424,6 +441,7 @@ export default function MobileExperience() {
         >
           {tabs.map(({ id, label, Icon }, index) => (
             <motion.button
+              initial={false}
               key={id}
               type="button"
               role="tab"
@@ -435,7 +453,7 @@ export default function MobileExperience() {
               ref={(el) => {
                 tabRefs.current[id] = el
               }}
-              className={`dock-tab ${tab === id ? 'text-primary' : 'text-muted'}`}
+              className={`dock-tab ${tab === id ? 'text-[var(--dock-selected-foreground)]' : 'text-muted'}`}
               animate={{ height: compact ? 44 : 52 }}
               transition={{ duration: reduced ? 0 : 0.3, ease: 'easeOut' }}
               onClick={() => pickTab(id)}
@@ -451,9 +469,9 @@ export default function MobileExperience() {
               <Icon size={20} strokeWidth={1.8} aria-hidden="true" className="relative shrink-0" />
               <motion.span
                 aria-hidden="true"
-                className={`relative overflow-hidden text-[11px] leading-[17px] ${tab === id ? 'font-bold' : ''}`}
+                className={`relative overflow-hidden text-[13px] leading-[18px] ${tab === id ? 'font-bold' : ''}`}
                 animate={{
-                  height: compact ? 0 : 17,
+                  height: compact ? 0 : 18,
                   opacity: compact ? 0 : 1,
                   marginTop: compact ? 0 : 2,
                 }}
@@ -470,5 +488,13 @@ export default function MobileExperience() {
         {stage === 'peek' ? '접힌 상태' : stage === 'half' ? '중간 높이' : '전체 보기'}
       </p>
     </div>
+  )
+}
+
+export default function MobileExperience() {
+  return (
+    <MotionConfig reducedMotion="user" transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}>
+      <MobileExperienceContent />
+    </MotionConfig>
   )
 }

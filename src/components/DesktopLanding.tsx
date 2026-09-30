@@ -2,50 +2,12 @@ import { useState } from 'react'
 import CommitteeWordmark from './CommitteeWordmark'
 import GalleryViewer from './GalleryViewer'
 import ThemeSelect from './ThemeSelect'
-import { galleryItems } from '../data/gallery'
+import { alumniRoles, event, mailto, programSteps, schedule } from '../data/event'
+import { galleryArchive, galleryItems } from '../data/gallery'
 import '../styles/desktop.css'
 
 const seatStudentImage = `${import.meta.env.BASE_URL}images/seat-student.svg`
 const seatAlumniImage = `${import.meta.env.BASE_URL}images/seat-alumni.svg`
-
-const steps = [
-  {
-    number: '01',
-    title: '관심 있는 테이블에 자리',
-    description: '학생들이 관심 직무와 진로 분야의 동문 선배님 테이블에 앉습니다.',
-  },
-  {
-    number: '02',
-    title: '경험을 듣고',
-    description: '선배님이 현재 하는 일과 선택의 과정을 소개합니다.',
-  },
-  {
-    number: '03',
-    title: '질문을 나눕니다',
-    description: '궁금한 점을 묻고 서로의 경험을 함께 이야기합니다.',
-  },
-]
-
-const roles = [
-  ['01', '지금 하는 일', '현재 맡고 있는 일과 진로를 소개해 주세요.'],
-  ['02', '여기까지의 과정', '준비와 선택, 현장에서 얻은 경험을 들려주세요.'],
-  ['03', '후배들의 질문', '학생들의 궁금증에 편하게 답해 주세요.'],
-]
-
-const timetable = [
-  ['19:00–19:10', '행사 소개'],
-  ['19:10–20:00', '1차 테이블 대화'],
-  ['20:00–20:10', '휴식'],
-  ['20:10–21:00', '2차 테이블 대화'],
-]
-
-const galleryCaptions = [
-  '2025년 상반기 · 현장 사진 · 테이블 토크',
-  '2025년 상반기 · 현장 사진 · 테이블 대화',
-  '2025년 상반기 · 현장 사진 · 질의응답',
-  '2026년 1학기 · 홍보 포스터',
-  '2026년 1학기 · 홍보 배너',
-]
 
 function SectionHeading({
   eyebrow,
@@ -119,13 +81,25 @@ export default function DesktopLanding() {
         type="button"
         className={`desktop-gallery-item ${className}`}
         onClick={() => setViewerIndex(index)}
-        aria-label={`${item.alt || galleryCaptions[index]} 크게 보기`}
+        aria-label={`${item.title} 크게 보기`}
       >
         <span className="desktop-gallery-image">
-          <img src={item.src} alt={item.alt} loading="lazy" />
+          <img
+            src={item.src}
+            srcSet={item.srcSet}
+            sizes={
+              className.includes('desktop-gallery-feature')
+                ? '(min-width: 1200px) 850px, 90vw'
+                : '(min-width: 1200px) 420px, 45vw'
+            }
+            width={item.width}
+            height={item.height}
+            alt={item.alt}
+            loading="lazy"
+          />
         </span>
         <span className="desktop-gallery-caption">
-          {galleryCaptions[index]} <span aria-hidden="true">↗</span>
+          {item.title} <span aria-hidden="true">↗</span>
         </span>
       </button>
     )
@@ -145,6 +119,7 @@ export default function DesktopLanding() {
             <a href="#gallery" className="desktop-nav-gallery">
               지난 ST:talk
             </a>
+            <a href="#alumni-role">선배님 역할</a>
             <a href="#time-and-place" className="desktop-nav-schedule">
               일정·장소
             </a>
@@ -159,7 +134,7 @@ export default function DesktopLanding() {
         <section id="overview" className="desktop-overview" aria-labelledby="desktop-hero-title">
           <div className="desktop-inner desktop-hero-grid">
             <div className="desktop-hero-copy">
-              <p className="desktop-eyebrow">2026 ST:TALK&nbsp; / &nbsp;동문 선배 초청</p>
+              <p className="desktop-eyebrow">{event.year} ST:TALK&nbsp; / &nbsp;동문 선배 초청</p>
               <h1 id="desktop-hero-title">
                 ST:talk
                 <br />
@@ -172,15 +147,15 @@ export default function DesktopLanding() {
               <div className="desktop-fact-grid">
                 <div className="desktop-fact">
                   <strong>날짜</strong>
-                  <span>2026. 11. 20. (금)</span>
+                  <span>{event.dateShort}</span>
                 </div>
                 <div className="desktop-fact">
                   <strong>시간</strong>
-                  <span>19:00–21:00</span>
+                  <span>{event.time}</span>
                 </div>
                 <div className="desktop-fact">
                   <strong>장소</strong>
-                  <span>서울과기대 중앙도서관 1층 ST 아트홀</span>
+                  <span>{event.venueFull}</span>
                 </div>
               </div>
               <a href="#how-it-works" className="desktop-primary-link">
@@ -188,8 +163,18 @@ export default function DesktopLanding() {
               </a>
             </div>
             <figure className="desktop-hero-photo">
-              {galleryItems[0] && <img src={galleryItems[0].src} alt={galleryItems[0].alt} />}
-              <figcaption>2025년 상반기 · ST:talk 테이블 토크 현장</figcaption>
+              {galleryItems[1] && (
+                <img
+                  src={galleryItems[1].src}
+                  srcSet={galleryItems[1].srcSet}
+                  sizes="(min-width: 1200px) 540px, 90vw"
+                  width={galleryItems[1].width}
+                  height={galleryItems[1].height}
+                  alt={galleryItems[1].alt}
+                  fetchPriority="high"
+                />
+              )}
+              <figcaption>{galleryItems[1]?.title}</figcaption>
             </figure>
           </div>
         </section>
@@ -209,7 +194,7 @@ export default function DesktopLanding() {
             <div className="desktop-how-grid">
               <SeatingDiagram />
               <div className="desktop-steps">
-                {steps.map((step) => (
+                {programSteps.map((step) => (
                   <article className="desktop-step" key={step.number}>
                     <span className="desktop-step-number">{step.number}</span>
                     <div>
@@ -229,7 +214,7 @@ export default function DesktopLanding() {
               <SectionHeading eyebrow="PAST ST:TALK" id="desktop-gallery-title">
                 지난 ST:talk 갤러리
               </SectionHeading>
-              <p>테이블에서 나눈 이야기와 행사의 기록을 모았습니다.</p>
+              <p>{galleryArchive.desktopSummary}</p>
             </div>
             <div className="desktop-gallery-group">
               <div className="desktop-gallery-group-title">
@@ -247,7 +232,7 @@ export default function DesktopLanding() {
             <div className="desktop-gallery-group">
               <div className="desktop-gallery-group-title">
                 <h3>2026년 1학기 · 홍보 기록</h3>
-                <span>홍보물 2</span>
+                <span>지난 행사 자료 · 홍보물 2</span>
               </div>
               <div className="desktop-gallery-promo">
                 {galleryImage(3, 'desktop-gallery-poster')}
@@ -266,11 +251,11 @@ export default function DesktopLanding() {
               현재 하는 일, 선택과 준비 과정, 학생들의 질문을 중심으로 이야기합니다.
             </p>
             <div className="desktop-role-grid">
-              {roles.map(([number, title, description]) => (
-                <article className="desktop-role" key={number}>
-                  <span>{number}</span>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
+              {alumniRoles.map((role) => (
+                <article className="desktop-role" key={role.number}>
+                  <span>{role.number}</span>
+                  <h3>{role.title}</h3>
+                  <p>{role.description}</p>
                 </article>
               ))}
             </div>
@@ -288,12 +273,12 @@ export default function DesktopLanding() {
             </SectionHeading>
             <div className="desktop-time-grid">
               <div className="desktop-schedule-card">
-                <h3>2026. 11. 20. (금)&nbsp; / &nbsp;프로그램 (안)</h3>
+                <h3>{event.dateShort}&nbsp; / &nbsp;프로그램 (안)</h3>
                 <ol>
-                  {timetable.map(([time, title]) => (
-                    <li key={time}>
-                      <time>{time}</time>
-                      <span>{title}</span>
+                  {schedule.map((session) => (
+                    <li key={session.range}>
+                      <time>{session.range}</time>
+                      <span>{session.title}</span>
                     </li>
                   ))}
                 </ol>
@@ -303,12 +288,12 @@ export default function DesktopLanding() {
                 <h3>
                   서울과학기술대학교
                   <br />
-                  중앙도서관 1층 ST 아트홀
+                  {event.venue}
                 </h3>
                 <p>
-                  2026년 11월 20일 금요일
+                  {event.dateNatural}
                   <br />
-                  오후 7시–9시
+                  {event.timeNatural}
                 </p>
               </div>
             </div>
@@ -325,10 +310,8 @@ export default function DesktopLanding() {
               문의 및 연락
             </SectionHeading>
             <p>행사에 관해 궁금한 점은 총졸업준비위원회로 문의해 주세요.</p>
-            <a href="mailto:seoultechgrad42@gmail.com">seoultechgrad42@gmail.com</a>
-            <p className="desktop-organizer">
-              주최&nbsp; 서울과학기술대학교 제42대 총졸업준비위원회
-            </p>
+            <a href={mailto}>{event.email}</a>
+            <p className="desktop-organizer">주최&nbsp; {event.organizer}</p>
           </div>
         </section>
       </main>
@@ -338,7 +321,7 @@ export default function DesktopLanding() {
           <div className="desktop-footer-rule" />
           <strong>ST:talk</strong>
           <div className="desktop-footer-details">
-            <p>서울과학기술대학교 제42대 총졸업준비위원회</p>
+            <p>{event.organizer}</p>
             <div className="desktop-footer-theme">
               <span>화면 테마</span>
               <ThemeSelect />

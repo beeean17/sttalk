@@ -149,12 +149,16 @@
   font-size: 14px;
 }
 .desktop-fact strong {
+  color: var(--muted);
+  font-size: 13px;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.55;
 }
 .desktop-fact span {
-  color: var(--muted);
+  color: var(--foreground);
+  font-size: 16px;
   line-height: 1.5;
+  font-weight: 700;
 }
 .desktop-primary-link {
   display: inline-flex;
@@ -195,8 +199,8 @@
 }
 .desktop-hero-photo figcaption {
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
 }
 
 .desktop-how {
@@ -257,8 +261,8 @@
   align-items: center;
   justify-content: center;
   gap: 3px;
-  font-size: 11px;
-  line-height: 1.25;
+  font-size: var(--text-caption);
+  line-height: 1.4;
   font-weight: 500;
 }
 .desktop-seat img {
@@ -274,8 +278,8 @@
   border-radius: 40px;
   background: var(--accent);
   color: var(--accent-foreground);
-  font-size: 12px;
-  line-height: 1.25;
+  font-size: var(--text-caption);
+  line-height: 1.4;
   font-weight: 500;
   text-align: center;
 }
@@ -286,8 +290,8 @@
 }
 .desktop-diagram-note {
   color: var(--muted);
-  font-size: 11px;
-  line-height: 1.4;
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
 }
 .desktop-steps {
   display: flex;
@@ -319,7 +323,7 @@
   margin-top: 6px !important;
   color: var(--muted);
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.65;
 }
 
 .desktop-gallery {
@@ -355,8 +359,8 @@
 }
 .desktop-gallery-group-title span {
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.3;
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
   font-weight: 500;
 }
 .desktop-gallery-photos {
@@ -592,16 +596,16 @@
 }
 .desktop-footer-details p {
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
 }
 .desktop-footer-theme {
   display: flex;
   align-items: center;
   gap: 12px;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
   white-space: nowrap;
 }
 
@@ -614,18 +618,9 @@
   }
   .desktop-nav a {
     min-width: auto;
-    padding-inline: 15px;
-    font-size: 12px;
-  }
-  .desktop-nav .desktop-nav-schedule {
-    display: none;
-  }
-  .desktop-nav .desktop-nav-gallery {
-    font-size: 0;
-  }
-  .desktop-nav .desktop-nav-gallery::after {
-    content: '아카이브';
-    font-size: 12px;
+    padding-inline: 11px;
+    font-size: 13px;
+    white-space: nowrap;
   }
   .desktop-overview {
     padding-block: 60px;
@@ -638,14 +633,15 @@
     font-size: 44px;
   }
   .desktop-fact-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
   }
   .desktop-fact {
     min-height: 0;
   }
   .desktop-hero-photo img {
-    height: 560px;
+    height: auto;
+    aspect-ratio: 4 / 3;
   }
   .desktop-how,
   .desktop-time,
@@ -679,13 +675,10 @@
   }
   .desktop-step-number {
     flex-basis: auto;
-    font-family: var(--font-sans);
-    font-size: 14px;
-    color: var(--foreground);
-    font-weight: 600;
+    font-size: 16px;
   }
   .desktop-step h3 {
-    font-size: 14px;
+    font-size: 16px;
   }
   .desktop-step p {
     grid-column: 1 / -1;
@@ -738,6 +731,26 @@
   }
   .desktop-contact {
     padding: 48px 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  .desktop-inner {
+    width: calc(100% - 64px);
+  }
+  .desktop-overview {
+    padding-block: 48px;
+  }
+  .desktop-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .desktop-hero-photo img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .desktop-fact-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

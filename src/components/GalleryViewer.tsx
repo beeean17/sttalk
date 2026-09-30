@@ -125,7 +125,7 @@ export default function GalleryViewer({
           )}
           <img
             key={item.id}
-            src={item.src}
+            src={item.originalSrc}
             width={item.width}
             height={item.height}
             alt={item.alt}

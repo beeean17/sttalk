@@ -23,6 +23,10 @@
   --neutral-925: #121a2b;
   --neutral-950: #0e1422;
   --neutral-1000: #000000;
+  --text-caption: 13px;
+  --text-body: 15px;
+  --leading-caption: 1.6;
+  --leading-body: 1.7;
   --viewer-foreground: var(--neutral-0);
   --viewer-background: color-mix(in srgb, var(--neutral-950) 97%, transparent);
   --viewer-backdrop: color-mix(in srgb, var(--neutral-950) 70%, transparent);
@@ -50,6 +54,7 @@
   --accent-foreground: var(--blue-900);
   --accent-soft: var(--yellow-100);
   --highlight: var(--brand-yellow);
+  --dock-selected-foreground: var(--blue-800);
   --brand-panel: var(--brand-blue);
   --panel-foreground: var(--neutral-0);
   --panel-muted: var(--blue-100);
@@ -81,6 +86,7 @@
   --accent-foreground: var(--blue-900);
   --accent-soft: var(--yellow-950);
   --highlight: var(--yellow-950);
+  --dock-selected-foreground: var(--blue-200);
   --brand-panel: var(--blue-800);
   --panel-foreground: var(--neutral-0);
   --panel-muted: var(--blue-100);
