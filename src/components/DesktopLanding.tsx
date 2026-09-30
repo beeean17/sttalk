@@ -212,9 +212,9 @@ export default function DesktopLanding() {
           <div className="desktop-inner">
             <div className="desktop-gallery-heading">
               <SectionHeading eyebrow="PAST ST:TALK" id="desktop-gallery-title">
-                지난 ST:talk 갤러리
+                지난 ST:talk 현장
               </SectionHeading>
-              <p>{galleryArchive.desktopSummary}</p>
+              <p>테이블에서 나눈 이야기와 행사의 분위기를 사진으로 먼저 만나보세요.</p>
             </div>
             <div className="desktop-gallery-group">
               <div className="desktop-gallery-group-title">
@@ -228,6 +228,21 @@ export default function DesktopLanding() {
                   {galleryImage(2)}
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="gallery-promo"
+          className="desktop-gallery desktop-gallery-promo-slide desktop-section-surface"
+          aria-labelledby="desktop-gallery-promo-title"
+        >
+          <div className="desktop-inner">
+            <div className="desktop-gallery-heading">
+              <SectionHeading eyebrow="PAST MATERIALS" id="desktop-gallery-promo-title">
+                지난 행사 홍보 자료
+              </SectionHeading>
+              <p>{galleryArchive.desktopSummary}</p>
             </div>
             <div className="desktop-gallery-group">
               <div className="desktop-gallery-group-title">
@@ -305,7 +320,7 @@ export default function DesktopLanding() {
           className="desktop-contact desktop-section-surface"
           aria-labelledby="desktop-contact-title"
         >
-          <div className="desktop-inner">
+          <div className="desktop-inner desktop-contact-content">
             <SectionHeading eyebrow="CONTACT" id="desktop-contact-title">
               문의 및 연락
             </SectionHeading>
@@ -313,22 +328,21 @@ export default function DesktopLanding() {
             <a href={mailto}>{event.email}</a>
             <p className="desktop-organizer">주최&nbsp; {event.organizer}</p>
           </div>
+          <footer className="desktop-footer">
+            <div className="desktop-inner">
+              <div className="desktop-footer-rule" />
+              <strong>ST:talk</strong>
+              <div className="desktop-footer-details">
+                <p>{event.organizer}</p>
+                <div className="desktop-footer-theme">
+                  <span>화면 테마</span>
+                  <ThemeSelect />
+                </div>
+              </div>
+            </div>
+          </footer>
         </section>
       </main>
-
-      <footer className="desktop-footer">
-        <div className="desktop-inner">
-          <div className="desktop-footer-rule" />
-          <strong>ST:talk</strong>
-          <div className="desktop-footer-details">
-            <p>{event.organizer}</p>
-            <div className="desktop-footer-theme">
-              <span>화면 테마</span>
-              <ThemeSelect />
-            </div>
-          </div>
-        </div>
-      </footer>
       <GalleryViewer
         items={galleryItems}
         initialIndex={viewerIndex}

@@ -538,8 +538,11 @@
 }
 
 .desktop-contact {
-  padding-block: 48px;
+  padding-block: 0;
   border-top: 1px solid var(--border);
+}
+.desktop-contact-content {
+  padding-block: 48px;
 }
 .desktop-contact .desktop-section-heading {
   gap: 16px;
@@ -547,7 +550,7 @@
 .desktop-contact .desktop-section-heading h2 {
   font-size: 32px;
 }
-.desktop-contact .desktop-inner > p:not(.desktop-organizer) {
+.desktop-contact-content > p:not(.desktop-organizer) {
   margin-top: 16px;
   color: var(--muted);
   font-size: 18px;
@@ -730,7 +733,10 @@
     margin-top: 27px;
   }
   .desktop-contact {
-    padding: 48px 0;
+    padding: 0;
+  }
+  .desktop-contact-content {
+    padding-block: 48px;
   }
 }
 
@@ -766,7 +772,149 @@
   }
 }
 
+@media (min-width: 1024px) and (min-height: 600px) {
+  .desktop-site {
+    --desktop-header-height: 66px;
+    height: 100vh;
+    height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--desktop-header-height);
+    scroll-snap-type: y mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .desktop-header {
+    position: sticky;
+    z-index: 20;
+    top: 0;
+    min-height: var(--desktop-header-height);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    background: color-mix(in srgb, var(--background) 88%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    backdrop-filter: blur(18px) saturate(1.2);
+  }
+  .desktop-header-inner {
+    min-height: var(--desktop-header-height);
+  }
+  .desktop-site section {
+    scroll-margin-top: 0;
+  }
+  .desktop-site main > section {
+    display: grid;
+    min-height: calc(100svh - var(--desktop-header-height));
+    align-items: center;
+    padding-block: clamp(24px, 5svh, 64px);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .desktop-overview {
+    padding-block: clamp(24px, 5svh, 64px);
+  }
+  .desktop-hero-photo img {
+    height: min(54svh, 530px);
+    aspect-ratio: 4 / 3;
+  }
+  .desktop-fact {
+    min-height: 88px;
+    padding: 16px;
+  }
+  .desktop-how-grid {
+    grid-template-columns: minmax(0, 512fr) minmax(0, 728fr);
+    gap: clamp(24px, 3vw, 40px);
+    margin-top: clamp(20px, 3svh, 32px);
+  }
+  .desktop-how-intro,
+  .desktop-alumni-intro {
+    margin-top: clamp(18px, 3svh, 32px) !important;
+  }
+  .desktop-steps {
+    gap: clamp(8px, 1.5svh, 12px);
+  }
+  .desktop-step {
+    display: flex;
+    grid-template-columns: none;
+    gap: 14px;
+    padding: clamp(12px, 2svh, 20px);
+  }
+  .desktop-step > div {
+    display: block;
+  }
+  .desktop-step p {
+    margin-top: 6px !important;
+  }
+  .desktop-gallery-group {
+    margin-top: clamp(20px, 3svh, 36px);
+  }
+  .desktop-gallery-photos {
+    grid-template-columns: minmax(0, 850fr) minmax(0, 414fr);
+    gap: 16px;
+  }
+  .desktop-gallery-side {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .desktop-gallery-feature .desktop-gallery-image {
+    height: clamp(220px, 45svh, 440px);
+    aspect-ratio: auto;
+  }
+  .desktop-gallery-side .desktop-gallery-image {
+    height: clamp(92px, calc(22.5svh - 30px), 190px);
+    aspect-ratio: auto;
+  }
+  .desktop-gallery-promo {
+    display: grid;
+    grid-template-columns: minmax(0, 300fr) minmax(0, 964fr);
+    gap: 16px;
+  }
+  .desktop-gallery-poster {
+    max-width: none;
+  }
+  .desktop-gallery-promo-slide .desktop-gallery-image {
+    height: clamp(240px, 48svh, 430px);
+    aspect-ratio: auto;
+  }
+  .desktop-role-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: clamp(20px, 3svh, 32px);
+  }
+  .desktop-time-grid {
+    grid-template-columns: minmax(0, 768fr) minmax(0, 488fr);
+    gap: 24px;
+    margin-top: clamp(20px, 3svh, 32px);
+  }
+  .desktop-contact {
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch !important;
+    padding-block: 0 !important;
+  }
+  .desktop-contact-content {
+    display: grid;
+    flex: 1;
+    align-content: center;
+    padding-block: 24px;
+  }
+  .desktop-footer {
+    flex: none;
+    padding-block: 20px;
+  }
+}
+
+@media (min-width: 1200px) and (min-height: 600px) {
+  .desktop-site {
+    --desktop-header-height: 70px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .desktop-site {
+    scroll-behavior: auto;
+  }
   .desktop-site *,
   .desktop-site *::before,
   .desktop-site *::after {
