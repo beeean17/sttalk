@@ -49,14 +49,13 @@ export const contactIntro =
 export const replyNote = '참여 여부를 카카오톡 오픈채팅으로 답변 부탁드립니다.'
 
 const [scaleGuests, ...scaleRest] = event.scale.split(' · ')
+// 문의 화면의 "참여 안내" 카드. 일시·장소는 첫 화면에 있어 여기서는 되풀이하지 않는다.
 export const summaryRows = [
-  { label: '일시', lines: [event.dateNatural, event.time] },
-  { label: '장소', lines: ['서울과학기술대학교', event.venue] },
   { label: '규모', lines: [scaleGuests, scaleRest.join(' · ')] },
-  {
-    label: '주최',
-    lines: ['서울과학기술대학교', event.organizer.replace('서울과학기술대학교 ', '')],
-  },
+  { label: '강연비', lines: ['소정의 강연비를 드립니다'] },
+  // 행사가 금요일이라 5부제 제한 끝자리가 5·0이다. 날짜가 바뀌면 함께 고친다.
+  { label: '주차', lines: ['주차할 수 있습니다', '차량 5부제로 번호 끝자리 5·0 차량은 입차 불가'] },
+  { label: '다과', lines: ['간식과 음료를 준비합니다'] },
 ]
 
 // 선배님께 부탁드리는 이야기 주제. 위원회가 보내는 자기소개 양식·예상 질문 목록과 같은 순서다.
@@ -172,6 +171,11 @@ export const faqs = [
   {
     question: '참여 여부는 언제까지 알려 드려야 하나요?',
     answer: `${event.replyBy}까지 카카오톡 오픈채팅(${event.kakao})으로 답변 부탁드립니다.`,
+  },
+  {
+    question: '강연비와 주차, 식사는 어떻게 되나요?',
+    answer:
+      '소정의 강연비를 드립니다. 주차는 가능하지만, 차량 5부제 때문에 번호 끝자리가 5 또는 0인 차량은 들어올 수 없습니다. 현장에는 간식과 음료를 준비합니다.',
   },
   {
     question: '행사 문의는 어떻게 하나요?',

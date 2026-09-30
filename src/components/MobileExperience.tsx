@@ -23,7 +23,7 @@ import {
   storyTopicsLabel,
   summaryRows,
 } from '../data/event'
-import { galleryItems } from '../data/gallery'
+import { galleryItems, heroPhoto } from '../data/gallery'
 import { pagerIndex } from '../lib/sectionProgress'
 import '../styles/mobile.css'
 
@@ -105,7 +105,6 @@ export default function MobileExperience() {
   const dockRef = useRef<HTMLDivElement>(null)
   const panelRefs = useRef<(HTMLDivElement | null)[]>([])
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
-  const heroPhoto = galleryItems.find((item) => item.id === '2025-table-talk')
 
   // 코드가 직접 스크롤시킨 움직임(내비로 탭 넘기기, 맨 위로 올리기, 폭 변경 후 맞추기)은
   // 사용자가 내용을 움직인 것이 아니므로 내비를 접지 않는다. 움직임이 멎고 0.2초 뒤에 해제한다.
@@ -289,19 +288,17 @@ export default function MobileExperience() {
                 </dd>
               </div>
             </dl>
-            {heroPhoto && (
-              <figure className="mobile-hero-photo">
-                <img
-                  src={heroPhoto.src}
-                  srcSet={heroPhoto.srcSet}
-                  sizes="100vw"
-                  width={heroPhoto.width}
-                  height={heroPhoto.height}
-                  alt={heroPhoto.alt}
-                  fetchPriority="high"
-                />
-              </figure>
-            )}
+            <figure className="mobile-hero-photo">
+              <img
+                src={heroPhoto.src}
+                srcSet={heroPhoto.srcSet}
+                sizes="100vw"
+                width={heroPhoto.width}
+                height={heroPhoto.height}
+                alt={heroPhoto.alt}
+                fetchPriority="high"
+              />
+            </figure>
           </section>
         </Panel>
 
@@ -419,11 +416,12 @@ export default function MobileExperience() {
                   <img
                     src={item.src}
                     srcSet={item.srcSet}
-                    sizes={index < 2 ? '100vw' : '50vw'}
+                    sizes="100vw"
                     width={item.width}
                     height={item.height}
                     alt={item.alt}
                     loading="lazy"
+                    style={item.focus ? { objectPosition: item.focus } : undefined}
                   />
                 </button>
               ))}
@@ -440,8 +438,8 @@ export default function MobileExperience() {
           }}
         >
           <section className="mobile-section mobile-contact" aria-labelledby="mobile-contact-title">
-            <SectionHeading eyebrow="CONTACT" id="mobile-contact-title" intro={contactIntro}>
-              문의 및 연락
+            <SectionHeading eyebrow="CONTACT & INFO" id="mobile-contact-title" intro={contactIntro}>
+              문의 및 안내
             </SectionHeading>
             <p className="mobile-contact-deadline">
               <strong>
@@ -456,15 +454,18 @@ export default function MobileExperience() {
               <ContactEmail />
             </div>
             <div className="mobile-summary">
-              <h3>행사 한눈에 보기</h3>
+              <h3>참여 안내</h3>
               <dl>
                 {summaryRows.map((row) => (
                   <div key={row.label}>
                     <dt>{row.label}</dt>
                     <dd>
-                      {row.lines[0]}
-                      <br />
-                      {row.lines[1]}
+                      {row.lines.map((line, index) => (
+                        <span key={line}>
+                          {index > 0 && <br />}
+                          {line}
+                        </span>
+                      ))}
                     </dd>
                   </div>
                 ))}

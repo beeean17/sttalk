@@ -8,6 +8,7 @@ import {
   faqs,
   prepNote,
   schedule,
+  summaryRows,
   talkFlow,
 } from '../src/data/event.ts'
 import { fullPrompt, linkPrompt, llmDocPaths, llmIndexPath, siteUrl } from '../src/data/llm.ts'
@@ -40,6 +41,11 @@ test('the routing page and the overview carry the confirmed event facts', () => 
       assert(text.includes(fact), fact)
     assert(text.includes(event.organizer))
   }
+})
+
+test('the overview lists everything on the participation guide card', () => {
+  const text = docs['llm/event.md']
+  for (const row of summaryRows) for (const line of row.lines) assert(text.includes(line), line)
 })
 
 test('the programme document matches the on-screen timetable', () => {

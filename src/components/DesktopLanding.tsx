@@ -22,7 +22,7 @@ import {
   storyTopicsLabel,
   summaryRows,
 } from '../data/event'
-import { galleryItems } from '../data/gallery'
+import { galleryItems, heroPhoto } from '../data/gallery'
 import useActiveSection from '../hooks/useActiveSection'
 import useMediaQuery from '../hooks/useMediaQuery'
 import '../styles/desktop.css'
@@ -53,7 +53,6 @@ export default function DesktopLanding() {
   const [viewerIndex, setViewerIndex] = useState<number | null>(null)
   const siteRef = useRef<HTMLDivElement>(null)
   const slideMode = useMediaQuery('(min-width: 1024px) and (min-height: 600px)')
-  const heroPhoto = galleryItems.find((item) => item.id === '2025-table-talk')
   // 헤더 메뉴가 진행 막대 역할을 하도록, 지금 보고 있는 섹션을 추적한다.
   // 데스크톱은 .desktop-site가, 태블릿은 창이 스크롤된다.
   const activeSection = useActiveSection(sectionIds, {
@@ -106,19 +105,17 @@ export default function DesktopLanding() {
               <p className="desktop-hero-description">{heroDescription}</p>
               <AiSummary />
             </div>
-            {heroPhoto && (
-              <figure className="desktop-hero-photo">
-                <img
-                  src={heroPhoto.src}
-                  srcSet={heroPhoto.srcSet}
-                  sizes="(min-width: 1024px) 50vw, 92vw"
-                  width={heroPhoto.width}
-                  height={heroPhoto.height}
-                  alt={heroPhoto.alt}
-                  fetchPriority="high"
-                />
-              </figure>
-            )}
+            <figure className="desktop-hero-photo">
+              <img
+                src={heroPhoto.src}
+                srcSet={heroPhoto.srcSet}
+                sizes="(min-width: 1024px) 50vw, 92vw"
+                width={heroPhoto.width}
+                height={heroPhoto.height}
+                alt={heroPhoto.alt}
+                fetchPriority="high"
+              />
+            </figure>
           </div>
           <div className="desktop-inner">
             <dl className="desktop-facts">
@@ -246,13 +243,14 @@ export default function DesktopLanding() {
                     srcSet={item.srcSet}
                     sizes={
                       index === 0
-                        ? '(min-width: 1440px) 1280px, 92vw'
-                        : '(min-width: 1440px) 420px, 31vw'
+                        ? '(min-width: 1024px) 62vw, 92vw'
+                        : '(min-width: 1024px) 31vw, 46vw'
                     }
                     width={item.width}
                     height={item.height}
                     alt={item.alt}
                     loading="lazy"
+                    style={item.focus ? { objectPosition: item.focus } : undefined}
                   />
                 </button>
               ))}
@@ -263,8 +261,12 @@ export default function DesktopLanding() {
         <section id="contact" className="desktop-contact" aria-labelledby="desktop-contact-title">
           <div className="desktop-inner desktop-contact-grid">
             <div className="desktop-contact-lead">
-              <SectionHeading eyebrow="CONTACT" id="desktop-contact-title" intro={contactIntro}>
-                문의 및 연락
+              <SectionHeading
+                eyebrow="CONTACT & INFO"
+                id="desktop-contact-title"
+                intro={contactIntro}
+              >
+                문의 및 안내
               </SectionHeading>
               <p className="desktop-contact-deadline">
                 <strong>
@@ -285,15 +287,18 @@ export default function DesktopLanding() {
               </div>
             </div>
             <div className="desktop-summary">
-              <h3>행사 한눈에 보기</h3>
+              <h3>참여 안내</h3>
               <dl>
                 {summaryRows.map((row) => (
                   <div key={row.label}>
                     <dt>{row.label}</dt>
                     <dd>
-                      {row.lines[0]}
-                      <br />
-                      {row.lines[1]}
+                      {row.lines.map((line, index) => (
+                        <span key={line}>
+                          {index > 0 && <br />}
+                          {line}
+                        </span>
+                      ))}
                     </dd>
                   </div>
                 ))}

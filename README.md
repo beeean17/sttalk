@@ -47,7 +47,7 @@ npm run preview      # 빌드 결과 로컬 확인
 - `src/hooks/useActiveSection.ts`, `src/lib/sectionProgress.ts`: 데스크톱 진행 막대의 현재 섹션 추적, 모바일의 현재 탭 계산
 - `src/data/event.ts`: 섹션 목록, 행사 일시·장소·문의 주소·시간표와 두 화면이 함께 쓰는 문구
 - `src/components/AiSummary.tsx`, `src/data/llm.ts`, `public/llms.txt`, `public/llm/*.md`: AI 요약용 문장과 안내 문서. 문서는 손으로 쓰며, `tests/llmDocs.test.mjs`가 화면 데이터와 어긋나면 실패합니다
-- `src/data/gallery.ts`, `assets/images/`: 지난 행사 현장 사진 4장과 목록용 WebP·확대용 원본 경로. 목록에 적은 파일만 번들에 포함됩니다
+- `src/data/gallery.ts`, `assets/images/`: 지난 행사 현장 사진 3장, 첫 화면 사진과 목록용 WebP·확대용 원본 경로. 목록에 적은 파일만 번들에 포함됩니다
 - `src/components/GalleryViewer.tsx`: 공통 확대 보기
 - `src/components/TemplateExample.tsx`, `src/data/template.ts`, `assets/images/template/`: 선배님 이야기의 "양식 예시 보기". 자기소개 양식 다섯 장을 확대 보기로 보여줍니다
 - `src/components/CommitteeWordmark.tsx`: grad42 규격의 공통 텍스트 워드마크

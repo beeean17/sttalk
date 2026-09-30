@@ -458,7 +458,7 @@
 }
 .desktop-gallery-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   margin-top: 32px;
 }
@@ -467,7 +467,7 @@
   display: block;
   min-width: 0;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 7 / 5;
   padding: 0;
   border: 0;
   border-radius: 20px;
@@ -685,16 +685,23 @@
     padding-block: clamp(10px, calc(7svh - 28px), 36px);
   }
 
+  /* 왼쪽에 전경을 크게, 오른쪽에 테이블 사진과 단체 사진을 위아래로 둔다.
+     단체 사진은 원본이 작아서 좁은 칸에 넣고, 칸 비율을 원본(7:5)에 가깝게 맞춘다. */
   .desktop-gallery-grid {
     min-height: 0;
     flex: 1;
-    grid-template-rows: minmax(0, 300fr) minmax(0, 232fr);
+    grid-template-columns: minmax(0, 820fr) minmax(0, 412fr);
+    grid-template-rows: minmax(0, 270fr) minmax(0, 300fr);
     margin-top: clamp(20px, 3.5svh, 36px);
   }
   .desktop-gallery-item,
   .desktop-gallery-item.is-wide {
     min-height: 120px;
     aspect-ratio: auto;
+  }
+  .desktop-gallery-item.is-wide {
+    grid-column: 1;
+    grid-row: 1 / -1;
   }
 
   .desktop-contact-grid {
