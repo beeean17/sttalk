@@ -1,244 +1,646 @@
-.mobile-experience {
-  position: relative;
-  isolation: isolate;
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  --sheet-gutter: 24px;
-}
-.safe-area-probe {
-  position: absolute;
-  visibility: hidden;
-  pointer-events: none;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-.mobile-overview {
-  position: absolute;
-  inset: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scrollbar-width: none;
-  overscroll-behavior-y: contain;
-}
-.mobile-overview::-webkit-scrollbar {
-  display: none;
-}
-.mobile-brand {
-  padding: max(24px, env(safe-area-inset-top)) var(--sheet-gutter) 0;
-}
-.mobile-hero {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 47px var(--sheet-gutter) 24px;
+/* 모바일·폴드: 서랍 없이 다섯 섹션을 한 페이지로 스크롤하고, 하단 내비로 이동한다. */
+.mobile-page {
+  --gutter: 24px;
+  /* 본문은 640px까지만 넓어지고, 그보다 넓은 화면에서는 가운데에 놓인다. */
+  --inline: max(var(--gutter), calc((100% - 640px) / 2));
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 112px);
+  background: var(--background);
+  color: var(--foreground);
 }
 .mobile-loading {
   width: 100%;
   height: 100dvh;
   background: var(--background);
 }
+.mobile-page a {
+  text-decoration: none;
+}
+.mobile-accent {
+  color: var(--accent-text);
+}
 .mobile-eyebrow {
+  color: var(--primary);
+  font-family: var(--font-display);
   font-size: 11px;
-  line-height: 1.55;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
-.mobile-event-name {
-  font-size: 58px;
-  line-height: 1.35;
+
+/* 01 행사 소개: 첫 화면을 채우고, 남는 높이는 사진이 차지한다. */
+.mobile-overview {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100svh;
+  flex-direction: column;
 }
-.mobile-title {
-  font-size: 30px;
-  line-height: 1.35;
+.mobile-brand {
+  padding: max(24px, env(safe-area-inset-top)) var(--inline) 0;
 }
-.mobile-event-date {
-  font-size: 14px;
-  line-height: 1.55;
-}
-.mobile-event-venue,
-.mobile-summary,
-.sheet-preview {
-  font-size: var(--text-caption);
-  line-height: var(--leading-caption);
-}
-.mobile-description {
-  font-size: 14px;
-  line-height: var(--leading-body);
-}
-.information-sheet {
-  position: absolute;
-  top: 0;
-  z-index: 2;
+.mobile-hero-copy {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 12px;
+  padding: 35px var(--inline) 0;
+}
+.mobile-hero-copy .mobile-eyebrow {
+  letter-spacing: 0.06em;
+}
+.mobile-hero-copy h1 {
+  font-family: var(--font-display);
+}
+.mobile-hero-name {
+  display: block;
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+.mobile-hero-sub {
+  display: block;
+  margin-top: 8px;
+  font-size: 28px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.mobile-hero-description {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.mobile-ai-button {
+  margin-top: 4px;
+}
+.mobile-facts {
+  margin: 24px var(--inline) 0;
   border: 1px solid var(--border);
+  border-radius: 18px;
   background: var(--card);
-  box-shadow: 0 2px 3px var(--shadow-subtle);
-  will-change: transform;
 }
-.sheet-handle {
-  display: flex;
-  width: 100%;
-  height: 44px;
-  flex-shrink: 0;
+.mobile-facts > div {
+  display: grid;
+  min-height: 46px;
+  grid-template-columns: 52px minmax(0, 1fr);
   align-items: center;
-  justify-content: center;
-  touch-action: none;
-  user-select: none;
-  cursor: grab;
+  padding: 10px 18px;
 }
-.sheet-handle:active {
-  cursor: grabbing;
+.mobile-facts > div + div {
+  border-top: 1px solid var(--border);
 }
-.sheet-handle:focus-visible {
-  outline-offset: -6px;
-  border-radius: inherit;
+.mobile-facts dt {
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.4;
 }
-.sheet-heading {
-  display: flex;
-  width: 100%;
-  height: 44px;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 8px;
-  padding-inline: var(--sheet-gutter);
-  border: 0;
-  background: transparent;
-  color: inherit;
-  text-align: left;
-  touch-action: none;
-  user-select: none;
-  cursor: grab;
+.mobile-facts dd {
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 600;
 }
-.sheet-heading:active {
-  cursor: grabbing;
+.mobile-facts small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
 }
-.sheet-heading h2 {
-  min-width: 0;
+.mobile-hero-photo {
+  position: relative;
+  min-height: 220px;
   flex: 1;
-  margin: 0;
-  font-size: 18px;
+  overflow: hidden;
+  margin-top: 24px;
+  border-radius: 28px 28px 0 0;
+  background: var(--card);
+}
+.mobile-hero-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 45% 55%;
+}
+
+/* 02–05 공통 */
+.mobile-section {
+  padding: 40px var(--inline) 0;
+}
+.mobile-section-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mobile-section-heading h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.mobile-section-intro {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* 02 진행·일정: 세로 시간표. 왼쪽 막대도 세로로 이어진다. */
+.mobile-timeline-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+.mobile-timeline-head h3 {
+  font-size: 17px;
   line-height: 1.4;
   font-weight: 700;
 }
-.sheet-preview {
+.mobile-draft-badge {
+  padding: 2px 9px;
+  border: 1px solid color-mix(in srgb, var(--accent-text) 65%, transparent);
+  border-radius: 999px;
+  color: var(--accent-text);
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+.mobile-timeline-head p {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.mobile-timeline {
   display: flex;
-  min-height: 44px;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+.mobile-slot {
+  display: grid;
+  grid-template-columns: 4px minmax(0, 1fr);
+  column-gap: 12px;
+}
+.mobile-slot-bar {
+  border-radius: 2px;
+  background: var(--border);
+}
+.mobile-slot-card {
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+}
+.mobile-slot-meta {
+  display: flex;
   align-items: center;
-  padding-inline: var(--sheet-gutter);
-  border: 0;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
+  justify-content: space-between;
+  gap: 12px;
 }
-.sheet-detail {
-  min-height: 0;
-  flex: 1;
+.mobile-slot-meta time {
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 700;
 }
-.sheet-detail[hidden],
-.sheet-scroll[hidden] {
-  display: none;
+.mobile-slot-tag {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 600;
 }
-.sheet-scroll {
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior-y: contain;
-  touch-action: pan-y;
-  -webkit-overflow-scrolling: touch;
-  padding: 12px var(--sheet-gutter) max(120px, calc(env(safe-area-inset-bottom) + 104px));
-  scroll-padding-block: 12px 120px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+.mobile-slot-card h4 {
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 700;
 }
-.sheet-scroll:focus-visible {
-  outline-offset: -3px;
+.mobile-slot-card > p,
+.mobile-slot-steps {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
 }
-.floating-dock-position {
+.mobile-slot-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mobile-slot-steps li {
+  display: flex;
+  gap: 10px;
+}
+.mobile-slot-steps li > span:first-child {
+  width: 12px;
+  flex: none;
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+}
+.mobile-slot.is-talk .mobile-slot-bar {
+  background: var(--brand-blue);
+}
+.mobile-slot.is-talk .mobile-slot-card {
+  border-color: var(--talk-border);
+  background: var(--talk-surface);
+}
+.mobile-slot.is-talk .mobile-slot-meta time {
+  color: var(--foreground);
+}
+.mobile-slot.is-talk .mobile-slot-tag {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--brand-blue);
+  color: var(--neutral-0);
+}
+.mobile-slot.is-talk h4 {
+  font-size: 18px;
+}
+.mobile-slot.is-talk .mobile-slot-card > p,
+.mobile-slot.is-talk .mobile-slot-steps {
+  margin-top: 8px;
+  color: color-mix(in srgb, var(--foreground) 82%, var(--talk-surface));
+}
+
+/* 03 선배님 이야기 */
+.mobile-roles {
+  margin-top: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.mobile-roles li {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  align-items: center;
+  padding-block: 20px;
+  border-top: 1px solid var(--border);
+}
+.mobile-role-number {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+.mobile-roles h3 {
+  font-size: 19px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+.mobile-roles p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.mobile-topics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+}
+.mobile-topics > p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+.mobile-topics ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mobile-topics li {
+  padding: 6px 14px;
+  border: 1px solid color-mix(in srgb, var(--muted) 45%, transparent);
+  border-radius: 999px;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+.mobile-note {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 24px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+}
+.mobile-note strong {
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.mobile-note p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* 04 지난 현장 */
+.mobile-gallery-count,
+.mobile-gallery-hint {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.mobile-gallery-count {
+  font-weight: 600;
+}
+.mobile-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+.mobile-gallery-item {
+  position: relative;
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  aspect-ratio: 165 / 128;
+  border-radius: 16px;
+  background: var(--card);
+}
+.mobile-gallery-item:nth-child(1) {
+  grid-column: 1 / -1;
+  aspect-ratio: 342 / 156;
+}
+.mobile-gallery-item:nth-child(2) {
+  grid-column: 1 / -1;
+  aspect-ratio: 342 / 196;
+}
+.mobile-gallery-item img {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 58%;
+}
+.mobile-gallery-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--neutral-950) 78%, transparent);
+  color: var(--neutral-0);
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* 05 문의 */
+.mobile-contact .mobile-section-heading h2 {
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.mobile-contact-link {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+.mobile-contact-email {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin-top: 14px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.mobile-contact-email span {
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 400;
+}
+.mobile-summary {
+  margin-top: 28px;
+  padding: 4px 20px 6px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+}
+.mobile-summary h3 {
+  padding-block: 16px 12px;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+.mobile-summary dl > div {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  column-gap: 8px;
+  padding-block: 14px;
+  border-top: 1px solid var(--border);
+}
+.mobile-summary dt {
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.85;
+}
+.mobile-summary dd {
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 600;
+}
+.mobile-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.mobile-footer strong {
+  display: block;
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.mobile-footer p,
+.mobile-footer-theme {
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.mobile-footer p {
+  margin-top: 4px;
+}
+.mobile-footer-theme {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 하단 내비. 선택 표시는 탭 하나 폭의 알약이 옆으로 미끄러진다. */
+.floating-dock-position {
+  position: fixed;
+  z-index: 30;
   inset-inline: 0;
-  z-index: 3;
+  bottom: max(20px, calc(env(safe-area-inset-bottom) + 8px));
   display: flex;
   justify-content: center;
   pointer-events: none;
 }
 .floating-dock {
+  --dock-tab-height: 52px;
+  position: relative;
   display: flex;
+  width: min(calc(100vw - 42px), 348px);
+  height: 64px;
   align-items: center;
-  flex-shrink: 0;
   gap: 2px;
   padding-inline: 6px;
   border: 1px solid var(--border);
+  border-radius: 36px;
   background: var(--card);
-  box-shadow: 0 2px 3px var(--shadow-subtle);
+  box-shadow: 0 10px 28px var(--shadow-color);
   pointer-events: auto;
+  transition:
+    width 0.3s ease-out,
+    height 0.3s ease-out,
+    border-radius 0.3s ease-out;
+}
+.dock-selection {
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  width: calc((100% - 12px - 8px) / 5);
+  height: var(--dock-tab-height);
+  border-radius: 24px;
+  background: var(--highlight);
+  transform: translate(calc(var(--dock-active, 0) * (100% + 2px)), -50%);
+  transition:
+    transform 0.3s ease-out,
+    height 0.3s ease-out;
 }
 .dock-tab {
   position: relative;
   display: flex;
   min-width: 44px;
-  flex: 1;
+  height: var(--dock-tab-height);
+  flex: 1 1 0;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 24px;
+  color: var(--muted);
   -webkit-user-select: none;
   user-select: none;
+  transition:
+    height 0.3s ease-out,
+    color 0.2s;
+}
+.dock-tab[aria-current] {
+  color: var(--dock-selected-foreground);
 }
 .dock-tab:focus-visible {
   outline-offset: -2px;
 }
-.dock-selection {
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  background: var(--highlight);
+.dock-label {
+  height: 18px;
+  overflow: hidden;
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 18px;
+  transition:
+    height 0.2s,
+    margin-top 0.2s,
+    opacity 0.2s;
 }
+.dock-tab[aria-current] .dock-label {
+  font-weight: 700;
+}
+.mobile-page[data-nav-state='compact'] .floating-dock {
+  --dock-tab-height: 44px;
+  width: 240px;
+  height: 56px;
+  border-radius: 28px;
+}
+.mobile-page[data-nav-state='compact'] .dock-label {
+  height: 0;
+  margin-top: 0;
+  opacity: 0;
+}
+
 @media (min-width: 560px) {
-  .mobile-experience {
-    --sheet-gutter: 32px;
+  .mobile-page {
+    --gutter: 32px;
   }
-  .mobile-event-name {
+  .mobile-hero-name {
     font-size: 72px;
+  }
+  .floating-dock {
+    width: min(calc(100vw - 42px), 440px);
+  }
+  .mobile-page[data-nav-state='compact'] .floating-dock {
+    width: 280px;
   }
 }
 @media (max-width: 359px) {
-  .mobile-experience {
-    --sheet-gutter: 20px;
+  .mobile-page {
+    --gutter: 20px;
   }
-  .mobile-hero h1 {
-    font-size: 28px;
+  .mobile-hero-name {
+    font-size: 56px;
+  }
+  .mobile-hero-sub {
+    font-size: 25px;
+  }
+  .mobile-section-heading h2 {
+    font-size: 22px;
   }
 }
-@media (max-width: 767px) and (max-height: 700px) {
+@media (max-height: 700px) {
   .mobile-brand {
     padding-top: max(18px, env(safe-area-inset-top));
   }
-  .mobile-hero {
-    gap: 8px;
-    padding-top: 20px;
+  .mobile-hero-copy {
+    padding-top: 22px;
   }
-  .mobile-event-name {
-    font-size: 48px;
-  }
-  .mobile-title {
-    font-size: 27px;
-  }
-  .mobile-event-card {
-    padding: 12px;
-  }
-  .mobile-description {
-    font-size: 13px;
-  }
-}
-@media (min-width: 560px) and (max-width: 767px) and (max-height: 700px) {
-  .mobile-event-name {
+  .mobile-hero-name {
     font-size: 52px;
   }
-}
-@media (prefers-reduced-motion: reduce) {
-  .information-sheet {
-    will-change: auto;
+  .mobile-hero-sub {
+    font-size: 25px;
+  }
+  .mobile-facts,
+  .mobile-hero-photo {
+    margin-top: 18px;
+  }
+  .mobile-hero-photo {
+    min-height: 200px;
   }
 }

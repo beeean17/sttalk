@@ -12,6 +12,7 @@
   --yellow-100: #fff3cf;
   --yellow-200: #ffe6a1;
   --yellow-600: #d7a73c;
+  --yellow-700: #8f6a14;
   --yellow-950: #46391d;
   --neutral-0: #ffffff;
   --neutral-50: #f7f8fc;
@@ -32,6 +33,9 @@
   --viewer-backdrop: color-mix(in srgb, var(--neutral-950) 70%, transparent);
   --viewer-control: color-mix(in srgb, var(--neutral-0) 14%, transparent);
   --viewer-control-hover: color-mix(in srgb, var(--neutral-0) 25%, transparent);
+  /* 시간표의 테이블 토크 칸. 테마 배경에 브랜드 파랑을 섞는다. */
+  --talk-surface: color-mix(in srgb, var(--brand-blue) 18%, var(--background));
+  --talk-border: color-mix(in srgb, var(--brand-blue) 55%, var(--background));
 }
 
 /* Semantic roles. Components consume these rather than palette names. */
@@ -53,6 +57,7 @@
   --accent-hover: var(--yellow-200);
   --accent-foreground: var(--blue-900);
   --accent-soft: var(--yellow-100);
+  --accent-text: var(--yellow-700);
   --highlight: var(--brand-yellow);
   --dock-selected-foreground: var(--blue-800);
   --brand-panel: var(--brand-blue);
@@ -85,6 +90,7 @@
   --accent-hover: var(--yellow-200);
   --accent-foreground: var(--blue-900);
   --accent-soft: var(--yellow-950);
+  --accent-text: var(--brand-yellow);
   --highlight: var(--yellow-950);
   --dock-selected-foreground: var(--blue-200);
   --brand-panel: var(--blue-800);

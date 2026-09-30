@@ -4,6 +4,8 @@
 
 처음 작성한 목록에는 의도적으로 정한 디자인을 문제로 취급한 제안이 섞여 있었습니다. 같은 날 다시 검토해 그런 제안은 [검토 후 제외한 제안](#검토-후-제외한-제안)으로 옮기고, 아직 정하지 않은 새 기능은 [결정이 필요한 선택 제안](#결정이-필요한-선택-제안)으로 분리했습니다. 항목 ID는 처음 목록과 같게 유지합니다.
 
+> **2026-09-30 이후 바뀐 점:** 이 문서를 쓴 뒤 사이트를 다섯 섹션(행사 소개 → 진행·일정 → 선배님 이야기 → 지난 현장 → 문의)으로 다시 짰고, 모바일의 하단 서랍(Peek/Half/Full)은 없앴습니다. 모바일은 한 페이지 스크롤에 하단 내비만 남습니다. 아래 표와 목록에서 서랍·시트·탭 재선택·해시 단계에 관한 항목은 이전 화면 기준의 기록입니다. 현재 구성은 [README.md](../README.md)와 [MOBILE_INTERACTION.md](../MOBILE_INTERACTION.md)를 보세요.
+
 수정할 때는 [CONTENT.md](../CONTENT.md)의 원칙을 지킵니다. 사이트에 참가 신청·참여 회신·회신 기한을 넣지 않고, 확정되지 않은 사례비·주차·식사·발표 자료 정보는 단정하지 않습니다.
 
 ## 유지하는 디자인 결정
@@ -85,7 +87,7 @@
 
 ### PERF-01 페이지 안에서 원본 이미지 약 12MB를 그대로 사용
 
-- **위치:** [public/images/](../public/images/), [gallery.ts](../src/data/gallery.ts), [DesktopLanding.tsx:191](../src/components/DesktopLanding.tsx#L191), [SheetContent.tsx](../src/components/SheetContent.tsx), [GalleryViewer.tsx](../src/components/GalleryViewer.tsx)
+- **위치:** [assets/images/](../assets/images/), [gallery.ts](../src/data/gallery.ts), [DesktopLanding.tsx:191](../src/components/DesktopLanding.tsx#L191), [SheetContent.tsx](../src/components/SheetContent.tsx), [GalleryViewer.tsx](../src/components/GalleryViewer.tsx)
 - **현재:**
 
   | 파일                               | 크기   | 해상도    |

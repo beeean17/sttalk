@@ -1,500 +1,306 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import type { KeyboardEvent, PointerEvent } from 'react'
-import { animate, MotionConfig, motion, useMotionValue, useTransform } from 'motion/react'
-import { CalendarDays, Images, MessagesSquare, Sparkles } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import type { CSSProperties } from 'react'
+import { CalendarDays, Images, Mail, MessagesSquare, Sparkles } from 'lucide-react'
+import AiSummary from './AiSummary'
 import CommitteeWordmark from './CommitteeWordmark'
+import GalleryViewer from './GalleryViewer'
 import ThemeSelect from './ThemeSelect'
-import SheetContent from './SheetContent'
-import { event } from '../data/event'
-import useMediaQuery from '../hooks/useMediaQuery'
 import {
-  progressAtTop,
-  sheetGeometry,
-  sheetStages,
-  snapStage,
-  topAtProgress,
-} from '../lib/sheetGeometry'
-import type { SheetStage } from '../lib/sheetGeometry'
+  alumniRoles,
+  contactIntro,
+  event,
+  galleryIntro,
+  heroDescription,
+  mailto,
+  prepNote,
+  programIntro,
+  schedule,
+  siteSections,
+  storyIntro,
+  storyTopics,
+  storyTopicsLabel,
+  summaryRows,
+} from '../data/event'
+import { galleryItems } from '../data/gallery'
+import useActiveSection from '../hooks/useActiveSection'
+import { dockState } from '../lib/sectionProgress'
 import '../styles/mobile.css'
 
-const tabs = [
-  {
-    id: 'intro',
-    label: '소개',
-    heading: '행사 소개',
-    preview: '진로에 관한 경험을 나누는 테이블 토크',
-    Icon: Sparkles,
-  },
-  {
-    id: 'program',
-    label: '진행',
-    heading: '이렇게 진행돼요',
-    preview: '10인 이하 테이블에서, 두 번의 대화',
-    Icon: MessagesSquare,
-  },
-  {
-    id: 'gallery',
-    label: '기록',
-    heading: '지난 ST:talk',
-    preview: '현장 사진과 홍보 자료로 만나는 ST:talk',
-    Icon: Images,
-  },
-  {
-    id: 'schedule',
-    label: '일정',
-    heading: '행사 일정',
-    preview: `${event.dateNatural}, ${event.timeNatural}`,
-    Icon: CalendarDays,
-  },
-] as const
-type TabId = (typeof tabs)[number]['id']
-
-function routeFromHash(): { tab: TabId; stage: SheetStage } {
-  const hash = window.location.hash.slice(1)
-  const [tab, stage] = hash.split('-')
-  if (tabs.some((item) => item.id === tab)) {
-    return {
-      tab: tab as TabId,
-      stage: sheetStages.includes(stage as SheetStage) ? (stage as SheetStage) : 'half',
-    }
-  }
-  return { tab: 'program', stage: 'peek' }
+const sectionIds = siteSections.map((section) => section.id)
+const dockIcons = {
+  overview: Sparkles,
+  'how-it-works': CalendarDays,
+  'alumni-role': MessagesSquare,
+  gallery: Images,
+  contact: Mail,
 }
 
-function MobileExperienceContent() {
-  const initial = useRef(routeFromHash()).current
-  const [tab, setTab] = useState<TabId>(initial.tab)
-  const [stage, setStage] = useState<SheetStage>(initial.stage)
-  const compact = stage === 'full'
-  const [dragging, setDragging] = useState(false)
-  const [viewport, setViewport] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-    safeBottom: 0,
-    safeTop: 0,
-  })
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
-  const rootRef = useRef<HTMLDivElement>(null)
-  const safeRef = useRef<HTMLDivElement>(null)
-  const baseRef = useRef<HTMLElement>(null)
-  const handleRef = useRef<HTMLButtonElement>(null)
-  const panelRefs = useRef<Partial<Record<TabId, HTMLDivElement | null>>>({})
-  const tabRefs = useRef<Partial<Record<TabId, HTMLButtonElement | null>>>({})
-  const stageRef = useRef(stage)
-  const tabRef = useRef(tab)
-  const settleRef = useRef<{ stop: () => void } | null>(null)
-  const gesture = useRef<{
-    id: number
-    y: number
-    top: number
-    stage: SheetStage
-    moved: boolean
-    samples: { y: number; time: number }[]
-  } | null>(null)
-  const ignoreClick = useRef(false)
-  const fold = viewport.width >= 560
-  const geometry = sheetGeometry(viewport.height, fold, viewport.safeBottom, viewport.safeTop)
-  const geometryRef = useRef(geometry)
-  geometryRef.current = geometry
-  const progress = useMotionValue(sheetStages.indexOf(initial.stage))
-  const y = useTransform(progress, [0, 1, 2], geometry.tops)
-  const height = useTransform(progress, [0, 1, 2], geometry.heights)
-  const inset = useTransform(progress, [0, 1, 2], geometry.insets)
-  const radius = useTransform(progress, [0, 1, 2], geometry.radii)
-  const detailsOpacity = useTransform(progress, [0, 0.2, 1], [0, 0, 1])
-  const active = tabs.find((item) => item.id === tab)!
-  const detailVisible = stage !== 'peek' || dragging
-
-  useEffect(() => {
-    if (reduced && !gesture.current) {
-      settleRef.current?.stop()
-      progress.set(sheetStages.indexOf(stageRef.current))
-    }
-  }, [reduced, progress])
-
-  const moveTo = useCallback(
-    (nextTab: TabId, nextStage: SheetStage, history: 'push' | 'replace' | 'none' = 'replace') => {
-      if (
-        nextStage === 'peek' &&
-        panelRefs.current[tabRef.current]?.contains(document.activeElement)
-      )
-        handleRef.current?.focus({ preventScroll: true })
-      stageRef.current = nextStage
-      tabRef.current = nextTab
-      setTab(nextTab)
-      setStage(nextStage)
-      settleRef.current?.stop()
-      settleRef.current = animate(
-        progress,
-        sheetStages.indexOf(nextStage),
-        reduced ? { duration: 0 } : { type: 'spring', stiffness: 430, damping: 42, mass: 1 },
-      )
-      if (history !== 'none') {
-        const hash = `#${nextTab}-${nextStage}`
-        if (window.location.hash !== hash)
-          window.history[history === 'push' ? 'pushState' : 'replaceState'](null, '', hash)
-      }
-    },
-    [progress, reduced],
-  )
-
-  useLayoutEffect(() => {
-    const root = rootRef.current!
-    const update = () => {
-      const rect = root.getBoundingClientRect()
-      const safe = getComputedStyle(safeRef.current!)
-      setViewport({
-        width: rect.width,
-        height: rect.height,
-        safeBottom: parseFloat(safe.paddingBottom) || 0,
-        safeTop: parseFloat(safe.paddingTop) || 0,
-      })
-      gesture.current = null
-      setDragging(false)
-      settleRef.current?.stop()
-      progress.set(sheetStages.indexOf(stageRef.current))
-    }
-    update()
-    const observer = new ResizeObserver(update)
-    observer.observe(root)
-    return () => observer.disconnect()
-  }, [progress])
-
-  useEffect(() => {
-    const onLocation = () => {
-      const next = routeFromHash()
-      moveTo(next.tab, next.stage, 'none')
-      if (window.location.hash === '#top')
-        baseRef.current?.scrollTo({ top: 0, behavior: 'instant' })
-    }
-    const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.key !== 'Escape' || e.defaultPrevented || document.querySelector('dialog[open]')) return
-      const current = stageRef.current
-      if (current !== 'peek') {
-        moveTo(tabRef.current, current === 'full' ? 'half' : 'peek')
-        handleRef.current?.focus({ preventScroll: true })
-      }
-    }
-    window.addEventListener('popstate', onLocation)
-    window.addEventListener('hashchange', onLocation)
-    window.addEventListener('keydown', onKey)
-    return () => {
-      window.removeEventListener('popstate', onLocation)
-      window.removeEventListener('hashchange', onLocation)
-      window.removeEventListener('keydown', onKey)
-      settleRef.current?.stop()
-    }
-  }, [moveTo])
-
-  function pickTab(next: TabId) {
-    const nextStage =
-      next === tab
-        ? stage === 'peek'
-          ? 'half'
-          : stage === 'half'
-            ? 'peek'
-            : 'half'
-        : stage === 'full'
-          ? 'full'
-          : 'half'
-    moveTo(next, nextStage, next === tab ? 'replace' : 'push')
-  }
-
-  function onTabsKey(e: KeyboardEvent<HTMLButtonElement>, index: number) {
-    let next = index
-    if (e.key === 'ArrowRight') next = (index + 1) % tabs.length
-    else if (e.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length
-    else if (e.key === 'Home') next = 0
-    else if (e.key === 'End') next = tabs.length - 1
-    else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      moveTo(tab, stage === 'peek' ? 'half' : 'full')
-      requestAnimationFrame(() => panelRefs.current[tab]?.focus({ preventScroll: true }))
-      return
-    } else return
-    e.preventDefault()
-    moveTo(tabs[next].id, stage === 'full' ? 'full' : 'half', 'push')
-    tabRefs.current[tabs[next].id]?.focus({ preventScroll: true })
-  }
-
-  function startDrag(e: PointerEvent<HTMLElement>) {
-    if (!e.isPrimary || e.button !== 0) return
-    settleRef.current?.stop()
-    ignoreClick.current = false
-    gesture.current = {
-      id: e.pointerId,
-      y: e.clientY,
-      top: topAtProgress(progress.get(), geometryRef.current.tops),
-      stage: stageRef.current,
-      moved: false,
-      samples: [{ y: e.clientY, time: e.timeStamp }],
-    }
-    e.currentTarget.setPointerCapture(e.pointerId)
-  }
-
-  function drag(e: PointerEvent<HTMLElement>) {
-    const g = gesture.current
-    if (!g || g.id !== e.pointerId) return
-    const delta = e.clientY - g.y
-    if (!g.moved && Math.abs(delta) < 4) return
-    g.moved = true
-    setDragging(true)
-    g.samples = [
-      ...g.samples.filter((s) => e.timeStamp - s.time < 100),
-      { y: e.clientY, time: e.timeStamp },
-    ]
-    progress.set(progressAtTop(g.top + delta, geometryRef.current.tops))
-  }
-
-  function finishDrag(e: PointerEvent<HTMLElement>, cancelled = false) {
-    const g = gesture.current
-    if (!g || g.id !== e.pointerId) return
-    gesture.current = null
-    setDragging(false)
-    if (e.currentTarget.hasPointerCapture(e.pointerId))
-      e.currentTarget.releasePointerCapture(e.pointerId)
-    if (!g.moved && !cancelled) return
-    ignoreClick.current = g.moved
-    const first = g.samples.find((s) => e.timeStamp - s.time <= 100)
-    const velocity =
-      first && e.timeStamp > first.time ? (e.clientY - first.y) / (e.timeStamp - first.time) : 0
-    const next = cancelled
-      ? g.stage
-      : snapStage(
-          topAtProgress(progress.get(), geometryRef.current.tops),
-          velocity,
-          geometryRef.current.tops,
-        )
-    moveTo(tab, next)
-  }
-
+function SectionHeading({
+  eyebrow,
+  children,
+  id,
+  intro,
+}: {
+  eyebrow: string
+  children: string
+  id: string
+  intro: string
+}) {
   return (
-    <div
-      ref={rootRef}
-      className="mobile-experience"
-      data-sheet-stage={stage}
-      data-nav-state={compact ? 'compact' : 'expanded'}
-      data-tab={tab}
-    >
-      <div ref={safeRef} className="safe-area-probe" aria-hidden="true" />
-      <a
-        href={`#${tab}-half`}
-        className="skip-link"
-        onClick={(e) => {
-          e.preventDefault()
-          moveTo(tab, 'half')
-          requestAnimationFrame(() => panelRefs.current[tab]?.focus())
-        }}
-      >
-        본문 바로가기
-      </a>
-      <main
-        id="top"
-        ref={baseRef}
-        className="mobile-overview"
-        style={{ bottom: viewport.height - geometry.tops[0] + 12 }}
-        inert={stage === 'full' ? true : undefined}
-      >
-        <header className="mobile-brand">
-          <CommitteeWordmark />
-        </header>
-        <div className="mobile-hero">
-          <p className="mobile-eyebrow font-bold text-primary">
-            {event.year}&nbsp; · &nbsp;ALUMNI TABLE TALK
-          </p>
-          <p className="mobile-event-name font-bold text-primary">ST:talk</p>
-          <h1 className="mobile-title font-bold">
-            진로의 다음 장,
-            <br className="fold:hidden" />
-            <span className="hidden fold:inline"> </span>선배의 경험에서.
-          </h1>
-          <div className="mobile-event-card flex flex-col gap-1.5 rounded-2xl bg-surface p-4">
-            <p className="mobile-event-date font-bold">
-              <time dateTime={event.dateISO}>{event.dateNatural}</time>&nbsp; · &nbsp;{event.time}
-            </p>
-            <p className="mobile-event-venue text-muted">{event.venueFull}</p>
-          </div>
-          <p className="mobile-description text-muted">
-            동문 선배님과 재학생이 마주 앉아 나누는
-            <br />
-            취업 · 창업 · 대학원 진학 이야기
-          </p>
-          <p className="mobile-summary text-muted">{event.scale}</p>
-        </div>
-      </main>
-
-      <motion.section
-        className="information-sheet"
-        aria-label="ST:talk 상세 정보"
-        style={{ y, height, left: inset, right: inset, borderRadius: radius }}
-      >
-        <button
-          ref={handleRef}
-          type="button"
-          className="sheet-handle"
-          aria-label={`정보 서랍 ${stage === 'full' ? '줄이기' : '펼치기'}`}
-          aria-expanded={stage !== 'peek'}
-          aria-controls="sheet-detail"
-          onPointerDown={startDrag}
-          onPointerMove={drag}
-          onPointerUp={(e) => finishDrag(e)}
-          onPointerCancel={(e) => finishDrag(e, true)}
-          onLostPointerCapture={(e) => finishDrag(e, true)}
-          onClick={() => {
-            if (ignoreClick.current) {
-              ignoreClick.current = false
-              return
-            }
-            moveTo(tab, stage === 'peek' ? 'half' : stage === 'half' ? 'full' : 'half')
-          }}
-          onKeyDown={(e) => {
-            const map: Record<string, SheetStage> = {
-              ArrowUp: stage === 'peek' ? 'half' : 'full',
-              ArrowDown: stage === 'full' ? 'half' : 'peek',
-              Home: 'peek',
-              End: 'full',
-            }
-            if (map[e.key]) {
-              e.preventDefault()
-              moveTo(tab, map[e.key])
-            }
-          }}
-        >
-          <span aria-hidden="true" className="h-1 w-9 rounded-full bg-muted opacity-35" />
-        </button>
-        <button
-          type="button"
-          className="sheet-heading"
-          aria-label={`${active.heading} 서랍 ${stage === 'peek' ? '펼치기' : '드래그 영역'}`}
-          aria-controls="sheet-detail"
-          aria-expanded={stage !== 'peek'}
-          onPointerDown={startDrag}
-          onPointerMove={drag}
-          onPointerUp={(e) => finishDrag(e)}
-          onPointerCancel={(e) => finishDrag(e, true)}
-          onLostPointerCapture={(e) => finishDrag(e, true)}
-          onClick={() => {
-            if (ignoreClick.current) {
-              ignoreClick.current = false
-              return
-            }
-            if (stage === 'peek') moveTo(tab, 'half')
-          }}
-        >
-          <h2>{active.heading}</h2>
-        </button>
-        {stage === 'peek' && !dragging && (
-          <button
-            type="button"
-            id="sheet-preview"
-            aria-labelledby={`tab-${tab}`}
-            aria-controls="sheet-detail"
-            className="sheet-preview text-muted"
-            onClick={() => moveTo(tab, 'half')}
-          >
-            {active.preview}
-          </button>
-        )}
-        <motion.div
-          id="sheet-detail"
-          className="sheet-detail"
-          style={{ opacity: detailsOpacity }}
-          hidden={!detailVisible}
-        >
-          {tabs.map((item) => (
-            <div
-              key={item.id}
-              id={`panel-${item.id}`}
-              role="tabpanel"
-              aria-labelledby={`tab-${item.id}`}
-              tabIndex={0}
-              hidden={item.id !== tab}
-              ref={(el) => {
-                panelRefs.current[item.id] = el
-              }}
-              className="sheet-scroll"
-            >
-              <SheetContent tab={item.id} />
-              {item.id === 'intro' && (
-                <div className="mt-8 flex items-center justify-between gap-4 border-t border-border pt-5 text-[13px] text-muted">
-                  <span>화면 테마</span>
-                  <ThemeSelect />
-                </div>
-              )}
-            </div>
-          ))}
-        </motion.div>
-      </motion.section>
-
-      <div className="floating-dock-position" style={{ bottom: geometry.dockBottom }}>
-        <motion.nav
-          initial={false}
-          role="tablist"
-          aria-label="행사 정보"
-          className="floating-dock"
-          animate={{
-            width: Math.min(viewport.width - 42, compact ? (fold ? 280 : 240) : fold ? 440 : 348),
-            height: compact ? 56 : 64,
-            borderRadius: compact ? 28 : 36,
-          }}
-          transition={{ duration: reduced ? 0 : 0.3, ease: 'easeOut' }}
-        >
-          {tabs.map(({ id, label, Icon }, index) => (
-            <motion.button
-              initial={false}
-              key={id}
-              type="button"
-              role="tab"
-              id={`tab-${id}`}
-              aria-label={label}
-              aria-selected={tab === id}
-              aria-controls={id === tab && !detailVisible ? 'sheet-preview' : `panel-${id}`}
-              tabIndex={tab === id ? 0 : -1}
-              ref={(el) => {
-                tabRefs.current[id] = el
-              }}
-              className={`dock-tab ${tab === id ? 'text-[var(--dock-selected-foreground)]' : 'text-muted'}`}
-              animate={{ height: compact ? 44 : 52 }}
-              transition={{ duration: reduced ? 0 : 0.3, ease: 'easeOut' }}
-              onClick={() => pickTab(id)}
-              onKeyDown={(e) => onTabsKey(e, index)}
-            >
-              {tab === id && (
-                <motion.span
-                  layoutId="dock-selection"
-                  className="dock-selection"
-                  transition={{ duration: reduced ? 0 : 0.3, ease: 'easeOut' }}
-                />
-              )}
-              <Icon size={20} strokeWidth={1.8} aria-hidden="true" className="relative shrink-0" />
-              <motion.span
-                aria-hidden="true"
-                className={`relative overflow-hidden text-[13px] leading-[18px] ${tab === id ? 'font-bold' : ''}`}
-                animate={{
-                  height: compact ? 0 : 18,
-                  opacity: compact ? 0 : 1,
-                  marginTop: compact ? 0 : 2,
-                }}
-                transition={{ duration: reduced ? 0 : 0.2 }}
-              >
-                {label}
-              </motion.span>
-            </motion.button>
-          ))}
-        </motion.nav>
-      </div>
-      <p role="status" className="sr-only">
-        {active.heading},{' '}
-        {stage === 'peek' ? '접힌 상태' : stage === 'half' ? '중간 높이' : '전체 보기'}
-      </p>
+    <div className="mobile-section-heading">
+      <p className="mobile-eyebrow">{eyebrow}</p>
+      <h2 id={id}>{children}</h2>
+      <p className="mobile-section-intro">{intro}</p>
     </div>
   )
 }
 
 export default function MobileExperience() {
+  const [viewerIndex, setViewerIndex] = useState<number | null>(null)
+  const activeSection = useActiveSection(sectionIds)
+  const navState = dockState(activeSection)
+  const heroPhoto = galleryItems.find((item) => item.id === '2025-table-talk')
+
+  // 이 화면은 나중에 불러오므로, 주소에 섹션 해시가 있으면 그린 뒤에 직접 맞춰 준다.
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (sectionIds.some((sectionId) => sectionId === id))
+      document.getElementById(id)?.scrollIntoView({ behavior: 'instant' })
+  }, [])
+
   return (
-    <MotionConfig reducedMotion="user" transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}>
-      <MobileExperienceContent />
-    </MotionConfig>
+    <div className="mobile-page" id="top" data-nav-state={navState}>
+      <a className="skip-link" href="#mobile-main">
+        본문 바로가기
+      </a>
+      <main id="mobile-main">
+        <section id="overview" className="mobile-overview" aria-labelledby="mobile-hero-title">
+          <header className="mobile-brand">
+            <CommitteeWordmark />
+          </header>
+          <div className="mobile-hero-copy">
+            <p className="mobile-eyebrow">{event.year} ST:TALK / 동문 선배 초청</p>
+            <h1 id="mobile-hero-title">
+              <span className="mobile-hero-name">
+                ST<span className="mobile-accent">:</span>talk
+              </span>{' '}
+              <span className="mobile-hero-sub">동문 선배님을 모십니다</span>
+            </h1>
+            <p className="mobile-hero-description">{heroDescription}</p>
+            <AiSummary className="mobile-ai-button" />
+          </div>
+          <dl className="mobile-facts">
+            <div>
+              <dt>날짜</dt>
+              <dd>
+                <time dateTime={event.dateISO}>{event.dateShort}</time>
+              </dd>
+            </div>
+            <div>
+              <dt>시간</dt>
+              <dd>{event.time}</dd>
+            </div>
+            <div>
+              <dt>장소</dt>
+              <dd>
+                {event.venue}
+                <small>서울과학기술대학교</small>
+              </dd>
+            </div>
+          </dl>
+          {heroPhoto && (
+            <figure className="mobile-hero-photo">
+              <img
+                src={heroPhoto.src}
+                srcSet={heroPhoto.srcSet}
+                sizes="100vw"
+                width={heroPhoto.width}
+                height={heroPhoto.height}
+                alt={heroPhoto.alt}
+                fetchPriority="high"
+              />
+            </figure>
+          )}
+        </section>
+
+        <section id="how-it-works" className="mobile-section" aria-labelledby="mobile-how-title">
+          <SectionHeading eyebrow="HOW IT WORKS" id="mobile-how-title" intro={programIntro}>
+            가까이 앉아, 깊이 나누는 대화
+          </SectionHeading>
+          <div className="mobile-timeline-head">
+            <h3>진행 시간표</h3>
+            <span className="mobile-draft-badge">가안</span>
+            <p>
+              {event.dateShort.replace(`${event.year}. `, '')} {event.time}
+            </p>
+          </div>
+          <ol className="mobile-timeline">
+            {schedule.map((session) => (
+              <li key={session.range} className={`mobile-slot ${session.talk ? 'is-talk' : ''}`}>
+                <span className="mobile-slot-bar" aria-hidden="true" />
+                <div className="mobile-slot-card">
+                  <div className="mobile-slot-meta">
+                    <time>{session.range}</time>
+                    <span className="mobile-slot-tag">
+                      {session.type} · {session.minutes}
+                    </span>
+                  </div>
+                  <h4>{session.title}</h4>
+                  {session.steps ? (
+                    <ol className="mobile-slot-steps">
+                      {session.steps.map((step, index) => (
+                        <li key={step}>
+                          <span aria-hidden="true">{index + 1}</span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  ) : (
+                    <p>{session.description}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section id="alumni-role" className="mobile-section" aria-labelledby="mobile-alumni-title">
+          <SectionHeading eyebrow="FOR OUR ALUMNI" id="mobile-alumni-title" intro={storyIntro}>
+            선배님의 이야기가 필요합니다
+          </SectionHeading>
+          <ol className="mobile-roles">
+            {alumniRoles.map((role) => (
+              <li key={role.number}>
+                <span className="mobile-role-number mobile-accent" aria-hidden="true">
+                  {role.number}
+                </span>
+                <div>
+                  <h3>{role.title}</h3>
+                  <p>{role.description}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className="mobile-topics">
+            <p>{storyTopicsLabel}</p>
+            <ul>
+              {storyTopics.map((topic) => (
+                <li key={topic}>{topic}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="mobile-note">
+            <strong className="mobile-accent">사전 준비</strong>
+            <p>{prepNote}</p>
+          </div>
+        </section>
+
+        <section id="gallery" className="mobile-section" aria-labelledby="mobile-gallery-title">
+          <SectionHeading eyebrow="PAST ST:TALK" id="mobile-gallery-title" intro={galleryIntro}>
+            지난 ST:talk 현장
+          </SectionHeading>
+          <p className="mobile-gallery-count">지난 행사 · 현장 사진 {galleryItems.length}</p>
+          <div className="mobile-gallery-grid">
+            {galleryItems.map((item, index) => (
+              <button
+                key={item.id}
+                type="button"
+                className="mobile-gallery-item"
+                onClick={() => setViewerIndex(index)}
+                aria-label={`${item.title} 크게 보기`}
+              >
+                <img
+                  src={item.src}
+                  srcSet={item.srcSet}
+                  sizes={index < 2 ? '100vw' : '50vw'}
+                  width={item.width}
+                  height={item.height}
+                  alt={item.alt}
+                  loading="lazy"
+                />
+                <span className="mobile-gallery-caption">{item.title}</span>
+              </button>
+            ))}
+          </div>
+          <p className="mobile-gallery-hint">사진을 누르면 크게 볼 수 있습니다.</p>
+        </section>
+
+        <section
+          id="contact"
+          className="mobile-section mobile-contact"
+          aria-labelledby="mobile-contact-title"
+        >
+          <SectionHeading eyebrow="CONTACT" id="mobile-contact-title" intro={contactIntro}>
+            문의 및 연락
+          </SectionHeading>
+          <a className="mobile-contact-link" href={mailto}>
+            이메일로 문의하기 <span aria-hidden="true">↗</span>
+          </a>
+          <p className="mobile-contact-email">
+            <span>이메일</span>
+            {event.email}
+          </p>
+          <div className="mobile-summary">
+            <h3>행사 한눈에 보기</h3>
+            <dl>
+              {summaryRows.map((row) => (
+                <div key={row.label}>
+                  <dt>{row.label}</dt>
+                  <dd>
+                    {row.lines[0]}
+                    <br />
+                    {row.lines[1]}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+          <footer className="mobile-footer">
+            <div>
+              <strong>ST:talk</strong>
+              <p>{event.organizer}</p>
+            </div>
+            <div className="mobile-footer-theme">
+              <span>화면 테마</span>
+              <ThemeSelect />
+            </div>
+          </footer>
+        </section>
+      </main>
+
+      {/* 하단 내비: 첫 섹션에서는 라벨까지 펼치고, 그 아래 섹션에서는 아이콘만 남긴다. */}
+      <div className="floating-dock-position">
+        <nav
+          aria-label="섹션 이동"
+          className="floating-dock"
+          style={{ '--dock-active': activeSection } as CSSProperties}
+        >
+          <span className="dock-selection" aria-hidden="true" />
+          {siteSections.map((section, index) => {
+            const Icon = dockIcons[section.id]
+            return (
+              <a
+                key={section.id}
+                href={`#${section.id}`}
+                aria-label={section.label}
+                aria-current={index === activeSection ? 'location' : undefined}
+                className="dock-tab"
+              >
+                <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
+                <span className="dock-label" aria-hidden="true">
+                  {section.short}
+                </span>
+              </a>
+            )
+          })}
+        </nav>
+      </div>
+
+      <GalleryViewer
+        items={galleryItems}
+        initialIndex={viewerIndex}
+        onClose={() => setViewerIndex(null)}
+      />
+    </div>
   )
 }

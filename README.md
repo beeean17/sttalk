@@ -13,7 +13,7 @@ npm run dev
 
 ```sh
 npm run check        # TypeScript 검사
-npm test             # 시트 위치·스냅 계산 단위 테스트
+npm test             # 섹션 추적·하단 내비 상태, AI용 안내 문서와 화면 데이터의 일치 여부 테스트
 npm run format:check # 코드 형식 검사
 npm run build        # 타입 검사 및 dist/ 프로덕션 빌드
 npm run preview      # 빌드 결과 로컬 확인
@@ -23,37 +23,40 @@ npm run preview      # 빌드 결과 로컬 확인
 
 | 뷰포트 조건                       | 화면 구성                                                         |
 | --------------------------------- | ----------------------------------------------------------------- |
-| 560px 미만                        | 모바일 행사 개요와 하단 4탭 탐색, 3단계 정보 시트                 |
-| 560–767px                         | 같은 시트를 넓은 폴드 레이아웃과 간격으로 표시                    |
-| 너비 768px 이상, 높이 600px 미만  | 가로형 휴대폰용 넓은 모바일 시트                                  |
-| 너비 768–1023px, 높이 600px 이상  | 태블릿용 연속 섹션 랜딩 페이지                                    |
+| 560px 미만                        | 모바일: 다섯 섹션을 한 페이지로 스크롤, 하단 5탭 내비             |
+| 560–767px                         | 같은 페이지를 넓은 폴드 여백과 내비 크기로 표시                   |
+| 너비 768px 이상, 높이 600px 미만  | 가로형 휴대폰용. 같은 모바일 페이지를 가운데 640px 폭으로 표시    |
+| 너비 768–1023px, 높이 600px 이상  | 고정 헤더 아래 다섯 섹션이 이어지는 태블릿용 연속 스크롤 페이지   |
 | 너비 1024px 이상, 높이 600px 이상 | 고정 헤더와 전체 화면 단위 스크롤 스냅을 쓰는 프레젠테이션형 화면 |
 
-모바일·폴드의 탭은 **소개 / 진행 / 기록 / 일정**, 시트 단계는 **Peek / Half / Full**입니다. 손잡이와 제목 영역을 드래그하거나, Peek의 제목·요약을 눌러 단계를 바꿀 수 있고, 본문은 시트 안에서 독립적으로 스크롤합니다. 하단 탐색은 접힌 상태와 중간 높이인 **Peek·Half에서 Expanded**, 완전히 올린 **Full에서만 Compact** 상태를 유지합니다. 스크롤·드래그·키보드 포커스 자체는 탐색 크기를 바꾸지 않으며, 유휴 타이머도 사용하지 않습니다. 현재 탭과 단계는 URL 해시에 반영되어 브라우저 뒤로 가기에도 연결됩니다.
+모바일·폴드는 서랍 없이 **행사 소개 → 진행·일정 → 선배님 이야기 → 지난 현장 → 문의**를 한 페이지로 이어서 보여줍니다. 데스크톱과 같은 데이터와 문구를 씁니다. 화면 아래에 떠 있는 내비는 **소개 / 진행 / 이야기 / 현장 / 문의** 다섯 탭이며, 누르면 해당 섹션으로 이동하고 지금 보는 섹션이 선택 표시됩니다. 내비는 **행사 소개 섹션에서는 라벨까지 보이는 Expanded**, 그 아래 섹션에서는 **아이콘만 남는 Compact**입니다. 크기는 현재 섹션만으로 정해지며 스크롤 방향이나 타이머를 쓰지 않습니다.
 
-[Figma의 V5 프로토타입](./FIGMA.md)은 움직일 때 축소하고 1200ms 뒤 복원하는 이전 전환을 보존합니다. 이번 변경은 React 화면에만 적용되었으며, 현재 동작은 [모바일 인터랙션 문서](./MOBILE_INTERACTION.md)의 단계별 정책을 따릅니다.
+[Figma의 프로토타입](./FIGMA.md)과 이전 버전의 3단계 서랍(Peek/Half/Full)은 2026-09-30에 걷어 냈습니다. 현재 동작은 [모바일 인터랙션 문서](./MOBILE_INTERACTION.md)를 따릅니다.
 
-태블릿·데스크톱에서는 행사 개요, 진행 방식, 지난 ST:talk 현장, 지난 행사 홍보 자료, 선배님의 역할, 일정·장소, 문의 순으로 보여줍니다. 1024px 이상 데스크톱에서는 고정 헤더 아래 각 섹션이 한 화면을 채우며, 휠·트랙패드 스크롤이 끝날 때 다음 화면에 맞춰집니다. 우측 하단 플로팅 CTA는 현재 화면 번호와 다음 내용을 안내하며 마지막 화면에서 ‘처음으로’로 전환됩니다. 문의 화면의 이메일은 보조 CTA로 표시합니다. 태블릿은 콘텐츠가 잘리지 않도록 기존의 연속 스크롤을 유지합니다. 페이지 안에서는 800px·1600px WebP를 화면 크기에 맞춰 받고, 이미지를 누른 확대 보기에서만 원본을 불러옵니다. 헤더의 위원회 워드마크는 grad42 원본의 두 줄 텍스트 규격을 반영합니다.
+행사 소개 아래의 **AI로 요약해서 보기** 버튼은 AI 챗봇에 붙여 넣을 문장을 작은 창에 보여 주고 복사하게 합니다. 문장은 `public/llms.txt`(목차)의 배포 주소를 가리키며, 주소를 열지 못하는 AI를 위해 문서 본문까지 넣은 문장으로 바꿀 수 있습니다. 세부 문서는 `public/llm/*.md`에 있고 사이트와 함께 그대로 배포됩니다.
+
+태블릿·데스크톱에서는 **행사 소개 → 진행·일정 → 선배님 이야기 → 지난 현장 → 문의** 다섯 섹션을 순서대로 보여줍니다. 진행·일정은 네 구간 시간표 하나로 합쳤고, 1차시 칸에 테이블 토크가 흘러가는 세 단계를 적었습니다. 헤더 메뉴의 밑줄이 진행 막대 역할을 해서 지나온 섹션·현재 섹션·남은 섹션을 색으로 구분하며, 이전/다음 플로팅 버튼은 없습니다. 1024px 이상 데스크톱에서는 고정 헤더 아래 각 섹션이 한 화면을 채우고, 휠·트랙패드 스크롤이 끝날 때 다음 화면에 맞춰집니다. 시간표는 데스크톱에서 가로 타임라인, 태블릿에서 세로 목록입니다. 문의 화면의 이메일은 보조 CTA로 표시합니다. 태블릿은 콘텐츠가 잘리지 않도록 연속 스크롤을 유지합니다. 페이지 안에서는 800px·1600px WebP를 화면 크기에 맞춰 받고, 이미지를 누른 확대 보기에서만 원본을 불러옵니다. 헤더의 위원회 워드마크는 grad42 원본의 두 줄 텍스트 규격을 반영합니다.
 
 행사 정보는 **2026년 11월 20일 (금) 19:00–21:00**, 서울과학기술대학교 **중앙도서관 1층 ST 아트홀**입니다. 동문 선배님 8–10명, 테이블당 10인 이하, 2차시로 안내합니다. 세부 시간표는 행사 안내 19:00–19:10, 1차시 19:10–20:00, 휴식 20:00–20:10, 2차시 20:10–21:00의 **가안**입니다. 문의 이메일은 **seoultechgrad42@gmail.com**입니다.
 
 ## 코드와 콘텐츠
 
 - `src/App.tsx`: 너비 768px·높이 600px 기준으로 두 화면 전환, 모바일 화면 지연 로드
-- `src/components/MobileExperience.tsx`, `src/lib/sheetGeometry.ts`: 모바일·폴드 시트, 탭, 스냅 위치와 제스처
+- `src/components/MobileExperience.tsx`, `src/styles/mobile.css`: 모바일·폴드 페이지와 하단 내비
 - `src/components/DesktopLanding.tsx`: 태블릿·데스크톱 섹션
-- `src/components/SheetContent.tsx`: 모바일·폴드의 네 탭 본문
-- `src/data/event.ts`: 행사 일시·장소·문의 주소·진행 단계·시간표
-- `src/data/gallery.ts`, `public/images/`: 지난 행사 자료 5개와 목록용 WebP·확대용 원본 경로
+- `src/hooks/useActiveSection.ts`, `src/lib/sectionProgress.ts`: 지금 보는 섹션 추적(데스크톱 진행 막대·모바일 내비 공통)과 내비 상태 규칙
+- `src/data/event.ts`: 섹션 목록, 행사 일시·장소·문의 주소·시간표와 두 화면이 함께 쓰는 문구
+- `src/components/AiSummary.tsx`, `src/data/llm.ts`, `public/llms.txt`, `public/llm/*.md`: AI 요약용 문장과 안내 문서. 문서는 손으로 쓰며, `tests/llmDocs.test.mjs`가 화면 데이터와 어긋나면 실패합니다
+- `src/data/gallery.ts`, `assets/images/`: 지난 행사 현장 사진 4장과 목록용 WebP·확대용 원본 경로. 목록에 적은 파일만 번들에 포함됩니다
 - `src/components/GalleryViewer.tsx`: 공통 확대 보기
 - `src/components/CommitteeWordmark.tsx`: grad42 규격의 공통 텍스트 워드마크
 - `CONTENT.md`, `FIGMA.md`, `MOBILE_INTERACTION.md`: 문구 근거, 디자인 출처와 인터랙션 기록
 
-React, TypeScript, Vite, Tailwind CSS, Motion, Lucide를 사용합니다. Noto Sans KR과 Manrope 가변 폰트는 Fontsource로 로컬 번들에 포함하므로 런타임 폰트 CDN 요청이 없습니다.
+React, TypeScript, Vite, Tailwind CSS, Lucide를 사용합니다. Noto Sans KR과 Manrope 가변 폰트는 Fontsource로 로컬 번들에 포함하므로 런타임 폰트 CDN 요청이 없습니다.
 
 ## 접근성과 테마
 
-탭은 방향키·Home·End로 이동하고, 손잡이는 방향키·Home·End로 시트 단계를 바꿉니다. Escape는 열린 시트를 한 단계 줄이고, 갤러리 확대 보기에서는 닫기로 동작합니다. 갤러리에서는 좌우 방향키와 가로 스와이프로 자료를 넘길 수 있습니다. 포커스 표시, 본문 바로가기, 스크린리더 상태 알림, `prefers-reduced-motion` 대응을 포함합니다. 손잡이의 Pointer Events와 시트 본문 스크롤은 분리되어 있습니다. 기기 모델이나 힌지 API 대신 CSS 뷰포트 너비와 실제 화면 크기를 사용합니다.
+하단 내비와 헤더 메뉴는 일반 링크라서 Tab으로 이동하고 Enter로 섹션에 갑니다. 현재 섹션은 `aria-current`로 알립니다. 갤러리 확대 보기와 AI 요약 창은 네이티브 `dialog`로 열리며 Escape나 닫기 버튼으로 닫습니다. 갤러리에서는 좌우 방향키와 가로 스와이프로 자료를 넘길 수 있습니다. 포커스 표시, 본문 바로가기, `prefers-reduced-motion` 대응을 포함합니다. 기기 모델이나 힌지 API 대신 CSS 뷰포트 너비와 실제 화면 크기를 사용합니다.
 
 전달받은 위원회 로고의 중심 색상은 파랑 `#3F57D2`, 노랑 `#FFD15F`입니다. `src/styles/tokens.css`는 원색을 `--brand-blue`, `--brand-yellow`로 보관하고, 화면에서는 `--background`, `--foreground`, `--primary`, `--card`, `--border`처럼 역할별 토큰을 씁니다. `@theme inline`을 통해 Tailwind 색상 유틸리티와 연결합니다.
 
@@ -63,11 +66,13 @@ React, TypeScript, Vite, Tailwind CSS, Motion, Lucide를 사용합니다. Noto S
 
 사이트 주소: [https://beeean17.github.io/sttalk/](https://beeean17.github.io/sttalk/)
 
-빌드 결과는 `dist/`입니다. Vite의 `base: './'`와 로컬 자산 경로를 사용하므로 `/sttalk/` 같은 저장소 하위 경로에서도 이미지와 코드가 로드됩니다. 모바일 탭·시트 위치는 URL 해시를 사용합니다.
+빌드 결과는 `dist/`입니다. Vite의 `base: './'`와 로컬 자산 경로를 사용하므로 `/sttalk/` 같은 저장소 하위 경로에서도 이미지와 코드가 로드됩니다. 섹션 위치는 `#gallery` 같은 URL 해시를 사용합니다. AI용 안내 문서의 링크와 요약 문장에는 위 사이트 주소가 그대로 들어가므로, 주소가 바뀌면 `src/data/llm.ts`와 `public/llms.txt`를 함께 고쳐야 합니다.
 
 `.github/workflows/pages.yml`은 `main` 푸시 또는 수동 실행 시 의존성 설치, 형식 검사, 단위 테스트, 빌드, GitHub Pages 배포를 수행합니다. 저장소 **Settings → Pages → Source**는 **GitHub Actions**로 설정되어 있습니다. 이후 `main`에 올린 변경은 검사를 통과하면 자동 배포됩니다.
 
 구성 참고: [Tailwind의 Vite 설치 가이드](https://tailwindcss.com/docs/installation/using-vite), [Vite의 GitHub Pages 배포 안내](https://vite.dev/guide/static-deploy.html#github-pages).
+
+아래 두 검증 이력은 서랍을 쓰던 이전 모바일 화면의 기록이며, 현재 화면의 검증 결과가 아닙니다.
 
 ## 변경 전 구현 검증 이력 — 2026-09-30
 
