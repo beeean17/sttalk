@@ -441,12 +441,6 @@
 }
 
 /* 05 문의 */
-.mobile-contact .mobile-section-heading h2 {
-  font-size: 28px;
-  line-height: 1.2;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
 .mobile-contact-link {
   display: flex;
   min-height: 52px;

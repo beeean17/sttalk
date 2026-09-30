@@ -511,15 +511,6 @@
   align-items: start;
   gap: 32px;
 }
-.desktop-contact .desktop-section-heading {
-  gap: 20px;
-}
-.desktop-contact .desktop-section-heading h2 {
-  font-size: 44px;
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-}
 .desktop-contact .desktop-section-intro {
   max-width: 480px;
 }
@@ -706,9 +697,6 @@
   .desktop-contact-grid {
     grid-template-columns: minmax(0, 600fr) minmax(0, 564fr);
     gap: clamp(40px, 6vw, 84px);
-  }
-  .desktop-contact .desktop-section-heading h2 {
-    font-size: 52px;
   }
 }
 
