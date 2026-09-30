@@ -5,7 +5,6 @@ import CommitteeWordmark from './CommitteeWordmark'
 import ContactEmail from './ContactEmail'
 import GalleryViewer from './GalleryViewer'
 import TemplateExample from './TemplateExample'
-import ThemeSelect from './ThemeSelect'
 import {
   talkTopics,
   talkTopicsNote,
@@ -295,16 +294,6 @@ export default function DesktopLanding() {
               </dl>
             </div>
           </div>
-          <footer className="desktop-footer">
-            <div className="desktop-inner desktop-footer-inner">
-              <strong>ST:talk</strong>
-              <p>{event.organizer}</p>
-              <div className="desktop-footer-theme">
-                <span>화면 테마</span>
-                <ThemeSelect />
-              </div>
-            </div>
-          </footer>
         </section>
       </main>
       <GalleryViewer

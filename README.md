@@ -61,7 +61,7 @@ React, TypeScript, Vite, Tailwind CSS, Lucide를 사용합니다. Noto Sans KR�
 
 전달받은 위원회 로고의 중심 색상은 파랑 `#3F57D2`, 노랑 `#FFD15F`입니다. `src/styles/tokens.css`는 원색을 `--brand-blue`, `--brand-yellow`로 보관하고, 화면에서는 `--background`, `--foreground`, `--primary`, `--card`, `--border`처럼 역할별 토큰을 씁니다. `@theme inline`을 통해 Tailwind 색상 유틸리티와 연결합니다.
 
-기본 테마는 시스템 설정입니다. 라이트·다크를 직접 선택하면 `sttalk-theme` 키에 저장하고, 시스템을 선택하면 저장값을 지워 OS 설정을 따릅니다. `public/theme-init.js`가 첫 화면 표시 전에 저장된 테마를 적용합니다. 폰트와 색상 근거는 [FIGMA.md](./FIGMA.md)에 기록했습니다.
+테마는 항상 시스템 설정을 따르며, 직접 고르는 버튼은 없습니다. `public/theme-init.js`가 첫 화면 표시 전에 시스템의 라이트·다크 설정을 적용하고, 설정이 바뀌면 바로 따라갑니다. 예전 테마 버튼이 저장해 둔 `sttalk-theme` 값은 지웁니다. 폰트와 색상 근거는 [FIGMA.md](./FIGMA.md)에 기록했습니다.
 
 ## GitHub Pages
 

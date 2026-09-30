@@ -59,13 +59,14 @@
   letter-spacing: 0.08em;
 }
 
-/* 01 행사 소개: 화면 높이를 채우고, 남는 높이는 사진이 차지한다.
+/* 01 행사 소개. 사진은 글·카드와 같은 폭으로 놓는다.
    휴대폰 브라우저는 주소창과 도구 막대 때문에 보이는 높이가 640px 안팎이므로,
    제목·설명·일시·장소가 하단 내비 위에 모두 들어오도록 크기를 화면에 맞춰 줄인다. */
 .mobile-overview {
   display: flex;
   min-height: 100%;
   flex-direction: column;
+  padding-bottom: var(--dock-clearance);
 }
 .mobile-brand {
   padding: max(20px, env(safe-area-inset-top)) var(--inline) 0;
@@ -140,11 +141,11 @@
 }
 .mobile-hero-photo {
   position: relative;
-  min-height: 200px;
-  flex: 1;
+  flex: none;
   overflow: hidden;
-  margin-top: 18px;
-  border-radius: 28px 28px 0 0;
+  aspect-ratio: 16 / 10;
+  margin: 16px var(--inline) 0;
+  border-radius: 16px;
   background: var(--card);
 }
 .mobile-hero-photo img {
@@ -493,39 +494,6 @@
   line-height: 1.55;
   font-weight: 600;
 }
-.mobile-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-top: 22px;
-  padding-top: 18px;
-  border-top: 1px solid var(--border);
-}
-.mobile-footer strong {
-  display: block;
-  color: var(--primary);
-  font-family: var(--font-display);
-  font-size: 18px;
-  line-height: 1.4;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-.mobile-footer p,
-.mobile-footer-theme {
-  color: var(--muted);
-  font-size: 12.5px;
-  line-height: 1.5;
-}
-.mobile-footer p {
-  margin-top: 4px;
-}
-.mobile-footer-theme {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 10px;
-}
 
 /* 하단 내비. 선택 표시는 탭 하나 폭의 알약이며, 화면을 넘기는 만큼 옆으로 따라 움직인다. */
 .floating-dock-position {
@@ -672,8 +640,5 @@
   }
   .mobile-hero-sub {
     font-size: 22px;
-  }
-  .mobile-hero-photo {
-    min-height: 180px;
   }
 }

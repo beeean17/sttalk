@@ -6,7 +6,6 @@ import CommitteeWordmark from './CommitteeWordmark'
 import ContactEmail from './ContactEmail'
 import GalleryViewer from './GalleryViewer'
 import TemplateExample from './TemplateExample'
-import ThemeSelect from './ThemeSelect'
 import {
   talkTopics,
   talkTopicsNote,
@@ -464,16 +463,6 @@ export default function MobileExperience() {
                 ))}
               </dl>
             </div>
-            <footer className="mobile-footer">
-              <div>
-                <strong>ST:talk</strong>
-                <p>{event.organizer}</p>
-              </div>
-              <div className="mobile-footer-theme">
-                <span>화면 테마</span>
-                <ThemeSelect />
-              </div>
-            </footer>
           </section>
         </Panel>
       </main>

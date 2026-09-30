@@ -505,9 +505,6 @@
 }
 
 /* 05 문의 */
-.desktop-site main > .desktop-contact {
-  padding-bottom: 0;
-}
 .desktop-contact-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -579,37 +576,6 @@
   font-size: 16px;
   line-height: 1.6;
   font-weight: 600;
-}
-.desktop-footer {
-  margin-top: 48px;
-}
-.desktop-footer-inner {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-block: 14px 18px;
-  border-top: 1px solid var(--border);
-}
-.desktop-footer strong {
-  color: var(--primary);
-  font-family: var(--font-display);
-  font-size: 18px;
-  line-height: 1.4;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-.desktop-footer p,
-.desktop-footer-theme {
-  color: var(--muted);
-  font-size: var(--text-caption);
-  line-height: var(--leading-caption);
-}
-.desktop-footer-theme {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-left: auto;
-  white-space: nowrap;
 }
 
 /* 데스크톱: 고정 헤더 아래 섹션마다 한 화면을 채우고 스크롤 스냅으로 넘긴다. */
@@ -743,10 +709,6 @@
   }
   .desktop-contact .desktop-section-heading h2 {
     font-size: 52px;
-  }
-  .desktop-footer {
-    flex: none;
-    margin-top: clamp(16px, 3svh, 32px);
   }
 }
 
