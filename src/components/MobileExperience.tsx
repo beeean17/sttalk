@@ -275,14 +275,10 @@ export default function MobileExperience() {
             </div>
             <dl className="mobile-facts">
               <div>
-                <dt>날짜</dt>
+                <dt>일시</dt>
                 <dd>
-                  <time dateTime={event.dateISO}>{event.dateShort}</time>
+                  <time dateTime={event.dateISO}>{event.dateShort}</time> · {event.time}
                 </dd>
-              </div>
-              <div>
-                <dt>시간</dt>
-                <dd>{event.time}</dd>
               </div>
               <div>
                 <dt>장소</dt>
