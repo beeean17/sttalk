@@ -48,7 +48,7 @@ npm run preview      # 빌드 결과 로컬 확인
 - `src/data/event.ts`: 섹션 목록, 행사 일시·장소·문의 주소·시간표와 두 화면이 함께 쓰는 문구
 - `src/components/AiSummary.tsx`, `src/data/llm.ts`, `public/llms.txt`, `public/llm/*.md`: AI 요약용 문장과 안내 문서. 문서는 손으로 쓰며, `tests/llmDocs.test.mjs`가 화면 데이터와 어긋나면 실패합니다
 - `src/data/gallery.ts`, `assets/images/`: 지난 행사 현장 사진 3장, 첫 화면 사진과 목록용 WebP·확대용 원본 경로. 목록에 적은 파일만 번들에 포함됩니다
-- `public/og-image.jpg`: 카카오톡 등 링크 미리보기에 쓰는 1200×630 사진. 미리보기는 절대 주소만 읽어서 이 파일만 `public/`에 고정된 이름으로 둡니다
+- `assets/images/share/sttalk-link-preview.jpg`: 카카오톡 등 링크 미리보기에 쓰는 1200×630 이미지. 미리보기는 절대 주소만 읽어서, 빌드할 때 `vite.config.ts`의 `renderBuiltUrl`이 이 이미지의 주소만 배포 주소(절대 주소)로 바꿔 적습니다
 - `src/components/GalleryViewer.tsx`: 공통 확대 보기
 - `src/components/TemplateExample.tsx`, `src/data/template.ts`, `assets/images/template/`: 선배님 이야기의 "양식 예시 보기". 자기소개 양식 다섯 장을 확대 보기로 보여줍니다
 - `src/components/CommitteeWordmark.tsx`: grad42 규격의 공통 텍스트 워드마크

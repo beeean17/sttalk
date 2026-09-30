@@ -80,10 +80,10 @@ test('prompts point at the routing page or embed every document', () => {
   for (const text of [index, ...Object.values(docs)]) assert(full.includes(text.trim()))
 })
 
-test('the link preview image is published at the address the page declares', () => {
+test('the link preview image lives under assets/images and the page declares its site address', () => {
   const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
   const image = html.match(/property="og:image" content="([^"]+)"/)?.[1]
-  assert(image?.startsWith(siteUrl), image)
-  assert(existsSync(new URL(`../public/${image.slice(siteUrl.length)}`, import.meta.url)), image)
+  assert(image?.startsWith('./assets/images/'), image)
+  assert(existsSync(new URL(`../${image.slice(2)}`, import.meta.url)), image)
   assert(html.includes(`property="og:url" content="${siteUrl}"`))
 })
