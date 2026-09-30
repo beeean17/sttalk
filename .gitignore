@@ -5,3 +5,9 @@ dist/
 *.tsbuildinfo
 docs/reference/*
 img_candidates/*
+.env
+.env.*
+*.log
+.vscode/
+.idea/
+.claude/
