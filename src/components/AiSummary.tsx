@@ -109,13 +109,13 @@ export default function AiSummary({ className = '' }: { className?: string }) {
                 </button>
               </div>
               <p className="ai-summary__lead">
-                아래 문장을 복사해 평소 쓰는 LLM 모델(ChatGPT, Claude 등)에 붙여 넣으면 이 사이트의
-                내용을 요약해 줍니다.
+                아래 프롬프트를 복사해 평소 쓰는 LLM 모델(ChatGPT, Claude 등)에 붙여 넣으면 이
+                사이트의 내용을 요약해 줍니다.
               </p>
               <textarea
                 ref={promptRef}
                 className="ai-summary__prompt"
-                aria-label="AI에게 보낼 문장"
+                aria-label="AI에게 보낼 프롬프트"
                 readOnly
                 rows={withDocuments ? 12 : 10}
                 value={prompt}
@@ -134,8 +134,8 @@ export default function AiSummary({ className = '' }: { className?: string }) {
                   문서 내용까지 넣기
                   <small>
                     {documents === 'failed'
-                      ? '문서를 불러오지 못했습니다. 링크만 담은 문장을 써 주세요.'
-                      : 'LLM이 문장 마지막의 주소를 읽지 못할 경우 켜 주세요.'}
+                      ? '문서를 불러오지 못했습니다. 링크만 담은 프롬프트를 써 주세요.'
+                      : 'LLM이 프롬프트 마지막의 주소를 읽지 못할 경우 켜 주세요.'}
                   </small>
                 </span>
               </label>
@@ -146,7 +146,7 @@ export default function AiSummary({ className = '' }: { className?: string }) {
                   ) : (
                     <Copy size={18} aria-hidden="true" />
                   )}
-                  {copied === 'done' ? '복사했습니다' : '문장 복사'}
+                  {copied === 'done' ? '복사했습니다' : '프롬프트 복사'}
                 </button>
                 <a
                   className="ai-summary__source"
@@ -159,7 +159,7 @@ export default function AiSummary({ className = '' }: { className?: string }) {
               </div>
               <p className="ai-summary__status" role="status">
                 {copied === 'failed' &&
-                  '자동으로 복사하지 못했습니다. 문장을 선택해 두었으니 직접 복사해 주세요.'}
+                  '자동으로 복사하지 못했습니다. 프롬프트를 선택해 두었으니 직접 복사해 주세요.'}
               </p>
             </div>
           </dialog>,

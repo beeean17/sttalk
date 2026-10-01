@@ -11,7 +11,15 @@ import {
   summaryRows,
   talkFlow,
 } from '../src/data/event.ts'
-import { fullPrompt, linkPrompt, llmDocPaths, llmIndexPath, siteUrl } from '../src/data/llm.ts'
+import {
+  fullPrompt,
+  linkPrompt,
+  llmDocPaths,
+  llmDocUrls,
+  llmIndexPath,
+  llmIndexUrl,
+  siteUrl,
+} from '../src/data/llm.ts'
 
 // AI용 안내 문서(public/)는 손으로 쓰므로, 화면이 쓰는 데이터와 어긋나지 않는지 확인한다.
 const read = (path) => readFileSync(new URL(`../public/${path}`, import.meta.url), 'utf8')
@@ -48,6 +56,20 @@ test('the overview lists everything on the participation guide card', () => {
   for (const row of summaryRows) for (const line of row.lines) assert(text.includes(line), line)
 })
 
+test('the routing page alone covers the timetable and the talk topics', () => {
+  // 세부 문서를 열지 못하는 AI도 목차 하나로 요약할 수 있게 핵심을 목차에도 둔다.
+  for (const session of schedule) {
+    assert(index.includes(session.range), session.range)
+    assert(index.includes(session.title), session.title)
+  }
+  for (const role of talkTopics) {
+    assert(index.includes(role.title), role.title)
+    assert(index.includes(role.description), role.description)
+  }
+  assert(index.includes(talkTopicsNote))
+  assert(index.includes(prepNote))
+})
+
 test('the programme document matches the on-screen timetable', () => {
   const text = docs['llm/program.md']
   for (const session of schedule) {
@@ -73,8 +95,9 @@ test('the FAQ document matches the talk topics and questions', () => {
   assert(text.includes(prepNote))
 })
 
-test('prompts point at the routing page or embed every document', () => {
-  assert(linkPrompt().endsWith(`${siteUrl}${llmIndexPath}`))
+test('prompts list every document address or embed every document', () => {
+  // 사용자가 준 주소만 여는 AI 도구도 있으므로, 목차와 세부 문서 주소가 모두 프롬프트 끝에 있어야 한다.
+  assert(linkPrompt().endsWith([llmIndexUrl, ...llmDocUrls].join('\n')))
   const full = fullPrompt([index, ...Object.values(docs)])
   assert(!full.includes(`\n${siteUrl}${llmIndexPath}\n\n---`))
   for (const text of [index, ...Object.values(docs)]) assert(full.includes(text.trim()))
