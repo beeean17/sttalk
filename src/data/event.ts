@@ -53,7 +53,7 @@ const [scaleGuests, ...scaleRest] = event.scale.split(' · ')
 export const summaryRows = [
   { label: '규모', lines: [scaleGuests, scaleRest.join(' · ')] },
   { label: '강연비', lines: ['소정의 강연비를 드립니다'] },
-  { label: '주차', lines: ['주차할 수 있습니다'] },
+  { label: '주차', lines: ['주차할 수 있습니다', '주차권을 지원해 드립니다'] },
   { label: '다과', lines: ['간식과 음료를 준비해 드립니다'] },
 ]
 
@@ -173,7 +173,8 @@ export const faqs = [
   },
   {
     question: '강연비와 주차, 식사는 어떻게 되나요?',
-    answer: '소정의 강연비를 드립니다. 주차할 수 있습니다. 현장에는 간식과 음료를 준비해 드립니다.',
+    answer:
+      '소정의 강연비를 드립니다. 주차할 수 있으며 주차권을 지원해 드립니다. 현장에는 간식과 음료를 준비해 드립니다.',
   },
   {
     question: '행사 문의는 어떻게 하나요?',
