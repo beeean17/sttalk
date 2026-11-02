@@ -315,7 +315,6 @@ export default function MobileExperience() {
             </SectionHeading>
             <div className="mobile-timeline-head">
               <h3>진행 시간표</h3>
-              <span className="mobile-draft-badge">가안</span>
               <p>
                 {event.dateShort.replace(`${event.year}. `, '')} {event.time}
               </p>

@@ -52,7 +52,10 @@ const [scaleGuests, ...scaleRest] = event.scale.split(' · ')
 // 문의 화면의 "참여 안내" 카드. 일시·장소는 첫 화면에 있어 여기서는 되풀이하지 않는다.
 export const summaryRows = [
   { label: '규모', lines: [scaleGuests, scaleRest.join(' · ')] },
-  { label: '강연비', lines: ['소정의 강연비를 드립니다'] },
+  {
+    label: '강연비',
+    lines: ['소정의 강연비를 드립니다', '금액은 카카오톡으로 문의해 주시면 안내해 드립니다'],
+  },
   { label: '주차', lines: ['주차할 수 있습니다', '주차권을 지원해 드립니다'] },
   { label: '다과', lines: ['간식과 음료를 준비해 드립니다'] },
 ]
@@ -110,18 +113,8 @@ export type ScheduleSession = {
 export const schedule: ScheduleSession[] = [
   {
     start: '19:00',
-    end: '19:10',
-    range: '19:00–19:10',
-    minutes: '10분',
-    title: '행사 안내',
-    description: '행사 취지와 진행 방식을 안내합니다.',
-    type: '안내',
-    talk: false,
-  },
-  {
-    start: '19:10',
-    end: '20:00',
-    range: '19:10–20:00',
+    end: '19:50',
+    range: '19:00–19:50',
     minutes: '50분',
     title: '첫 번째 테이블 토크',
     description: '선배님의 직무·경험 소개와 자유로운 질의응답',
@@ -130,24 +123,35 @@ export const schedule: ScheduleSession[] = [
     steps: talkFlow,
   },
   {
-    start: '20:00',
-    end: '20:10',
-    range: '20:00–20:10',
+    start: '19:50',
+    end: '20:00',
+    range: '19:50–20:00',
     minutes: '10분',
     title: '쉬어가는 시간',
-    description: '다음 차시 전에 잠시 쉬어갑니다.',
+    description:
+      '학생들은 2차시에 신청한 테이블로 자리를 옮기고, 선배님은 그 자리에 계시면 됩니다.',
     type: '휴식',
     talk: false,
   },
   {
-    start: '20:10',
-    end: '21:00',
-    range: '20:10–21:00',
+    start: '20:00',
+    end: '20:50',
+    range: '20:00–20:50',
     minutes: '50분',
     title: '두 번째 테이블 토크',
     description: '1차시와 같은 방식으로 선배님의 경험을 듣고 자유롭게 질문합니다.',
     type: '2차시',
     talk: true,
+  },
+  {
+    start: '20:50',
+    end: '21:00',
+    range: '20:50–21:00',
+    minutes: '10분',
+    title: '마무리',
+    description: '인사를 나누며 행사를 마무리합니다.',
+    type: '마무리',
+    talk: false,
   },
 ]
 
@@ -160,7 +164,7 @@ export const faqs = [
   {
     question: '학생들과는 어떻게 만나나요?',
     answer:
-      '학생들은 관심 있는 직무·직업의 선배님을 신청하고 해당 테이블에 앉습니다. 테이블당 10인 이하로, 선배님의 이야기를 듣고 궁금한 점을 직접 질문하는 방식입니다. 행사는 총 2차시로 진행합니다.',
+      '학생들은 관심 있는 직무·직업의 선배님을 신청하고 해당 테이블에 앉습니다. 테이블당 10인 이하로, 선배님의 이야기를 듣고 궁금한 점을 직접 질문하는 방식입니다. 행사는 총 2차시로 진행하며, 차시가 바뀔 때 학생들이 각자 신청한 테이블로 옮기고 선배님은 자리를 옮기지 않으십니다.',
   },
   {
     question: '발표 자료를 미리 준비해야 하나요?',
@@ -174,7 +178,7 @@ export const faqs = [
   {
     question: '강연비와 주차, 식사는 어떻게 되나요?',
     answer:
-      '소정의 강연비를 드립니다. 주차할 수 있으며 주차권을 지원해 드립니다. 현장에는 간식과 음료를 준비해 드립니다.',
+      '소정의 강연비를 드립니다. 금액은 카카오톡 오픈채팅으로 문의해 주시면 안내해 드립니다. 주차할 수 있으며 주차권을 지원해 드립니다. 현장에는 간식과 음료를 준비해 드립니다.',
   },
   {
     question: '행사 문의는 어떻게 하나요?',

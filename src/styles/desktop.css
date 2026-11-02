@@ -232,15 +232,6 @@
   line-height: 1.4;
   font-weight: 700;
 }
-.desktop-draft-badge {
-  padding: 3px 10px;
-  border: 1px solid color-mix(in srgb, var(--accent-text) 65%, transparent);
-  border-radius: 999px;
-  color: var(--accent-text);
-  font-size: 12px;
-  line-height: 1.4;
-  font-weight: 700;
-}
 .desktop-timeline-date {
   margin-left: auto;
   color: var(--muted);

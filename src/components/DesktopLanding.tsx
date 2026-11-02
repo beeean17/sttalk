@@ -144,7 +144,6 @@ export default function DesktopLanding() {
             </SectionHeading>
             <div className="desktop-timeline-head">
               <h3>진행 시간표</h3>
-              <span className="desktop-draft-badge">가안</span>
               <p className="desktop-timeline-date">
                 {event.dateShort} {event.time}
               </p>
