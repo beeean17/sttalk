@@ -13,8 +13,8 @@ export const event = {
   venueHeading: 'ST 아트홀',
   venueFull: '서울과학기술대학교 중앙도서관 1층 ST 아트홀',
   // 참여 여부를 알려 달라고 부탁드리는 기한.
-  replyBy: '10월 15일(목)',
-  replyByISO: '2026-10-15',
+  replyBy: '11월 6일(금)',
+  replyByISO: '2026-11-06',
   // 문의와 회신은 카카오톡 오픈채팅으로 받고, 이메일은 주소만 보여 준다.
   kakao: 'https://open.kakao.com/o/sT89waQi',
   email: 'seoultechgrad42@gmail.com',
@@ -53,8 +53,7 @@ const [scaleGuests, ...scaleRest] = event.scale.split(' · ')
 export const summaryRows = [
   { label: '규모', lines: [scaleGuests, scaleRest.join(' · ')] },
   { label: '강연비', lines: ['소정의 강연비를 드립니다'] },
-  // 행사가 금요일이라 5부제 제한 끝자리가 5·0이다. 날짜가 바뀌면 함께 고친다.
-  { label: '주차', lines: ['주차할 수 있습니다', '차량 5부제로 번호 끝자리 5·0 차량은 입차 불가'] },
+  { label: '주차', lines: ['주차할 수 있습니다'] },
   { label: '다과', lines: ['간식과 음료를 준비해 드립니다'] },
 ]
 
@@ -174,8 +173,7 @@ export const faqs = [
   },
   {
     question: '강연비와 주차, 식사는 어떻게 되나요?',
-    answer:
-      '소정의 강연비를 드립니다. 주차는 가능하지만, 차량 5부제 때문에 번호 끝자리가 5 또는 0인 차량은 들어올 수 없습니다. 현장에는 간식과 음료를 준비해 드립니다.',
+    answer: '소정의 강연비를 드립니다. 주차할 수 있습니다. 현장에는 간식과 음료를 준비해 드립니다.',
   },
   {
     question: '행사 문의는 어떻게 하나요?',
